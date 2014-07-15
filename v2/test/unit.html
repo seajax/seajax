@@ -1,0 +1,124 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Seajax v2 Unit Tests</title>
+    <link rel="Stylesheet" href="unit.css"/>
+    <script>
+        (function () {
+            // all script paths on this page are relative to the seajax v2 root,
+            // not the test directory.
+            //
+            // a <base> tag with a relative URL as its href is actually illegal
+            // per the HTML standard, and Firefox won't respect it. to work
+            // around this, we create one programmatically through script with
+            // an absolute URL.
+            //
+            // to derive the absolute URL, we take advantage of modern browsers
+            // that return an absolute URL always even if a relative URL is
+            // specified -- this does the work for us. we derive it manually for
+            // browsers that don't do this (e.g. IE7-, Chrome).
+            var BASE_URL = "../",
+                base = document.createElement("base"),
+                baseHref,
+                baseHrefAbsolute,
+                locationHref,
+                lastSlash;
+
+            base.href = BASE_URL;
+            baseHref = base.href;
+
+            if (baseHref.search(/http[s]?:\/\//) === 0) {
+                baseHrefAbsolute = baseHref;
+            } else {
+                locationHref = location.href;
+                lastSlash = locationHref.lastIndexOf('?');
+                if (lastSlash !== -1) {
+                    locationHref = locationHref.substr(0, lastSlash);
+                }
+                lastSlash = locationHref.lastIndexOf('/');
+                baseHrefAbsolute = locationHref.substr(0, lastSlash + 1) + baseHref;
+            }
+
+            document.write(['<base href="', baseHrefAbsolute, '" />'].join(''));
+        } ());
+    </script>
+    <script src="src/load.js?target=test"></script>
+    <script src="test/unit.js"></script>
+    <script src="test/expect.js"></script>
+    <script src="test/core/Point.js"></script>
+    <script src="test/core/Size.js"></script>
+    <script src="test/core/Rect.js"></script>
+    <script src="test/utils/Object.js"></script>
+    <script src="test/utils/Function.js"></script>
+    <script src="test/utils/Browser.js"></script>
+    <script src="test/utils/Math.js"></script>
+    <script src="test/utils/String.js"></script>
+    <script src="test/utils/Uri.js"></script>
+    <script src="test/utils/Xml.js"></script>
+    <script src="test/image/DisplayRect.js"></script>
+    <script src="test/image/TileInfo.js"></script>
+    <script src="test/image/TileSource.js"></script>
+    <script src="test/image/DziTileSource.js"></script>
+    <script src="test/image/DzcTileSource.js"></script>
+    <script src="test/image/DeepZoom.js"></script>
+    <script src="test/image/Network.js"></script>
+    <script src="test/image/Canvas.js"></script>
+    <script src="test/image/Image.js"></script>
+</head>
+<body onload="runner.go()">
+    <h2>Configuration</h2>
+    <div class="h2box">
+        <div id="config-listing" class="mc10"></div>
+    </div>
+
+    <h2>Summary</h2>
+    <div class="h2box">
+        <table>
+            <tr>
+                <td>
+                    <table id="rate">
+                        <tr><td id="pct-tests-selected" class="pct"></td><td>Selected</td></tr>
+                        <tr><td id="pct-tests-completed" class="pct"></td><td>Completed</td></tr>
+                        <tr><td id="pct-tests-pass" class="pct"></td><td>Passed</td></tr>
+                    </table>
+                </td>
+
+                <td>
+                    <table id="stats">
+                        <tr><td></td><td>defined</td><td>selected</td><td>completed</td><td>passed</td></tr>
+                        <tr>
+                            <td>suites</td>
+                            <td id="num-suites-defined"></td>
+                            <td id="num-suites-selected"></td>
+                            <td id="num-suites-completed"></td>
+                            <td id="num-suites-passed"></td>
+                        </tr>
+                        <tr>
+                            <td>tests</td>
+                            <td id="num-tests-defined"></td>
+                            <td id="num-tests-selected"></td>
+                            <td id="num-tests-completed"></td>
+                            <td id="num-tests-passed"></td>
+                        </tr>
+                    </table>
+                </td>
+
+                <td>
+                    <div id="fail-list"></div>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <h2>Selected Tests</h2>
+    <div class="h2box">
+        <div id="selected-listing" class="mc30"></div>
+    </div>
+
+    <h2>Unselected Tests</h2>
+    <div class="h2box">
+        <div id="unselected-listing" class="mc30"></div>
+    </div>
+
+</body>
+</html>

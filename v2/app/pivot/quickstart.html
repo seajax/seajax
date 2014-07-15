@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Seajax Pivot Viewer Developer Guide</title>
+        <style>
+            html {
+                font-family:sans-serif;
+                font-size:0.875em;
+                background:#ddd;
+            }
+            h1 {
+                font-size:1.5em;
+            }
+            h2 {
+                font-size:1em;
+                font-weight:bold;
+            }
+            .content {
+                margin:0 auto;
+                background:white;
+                max-width:800px;
+                padding:1em;
+            }
+            code {
+                display:block;
+                white-space:pre;
+                font-family:Consolas,"Courier New",monospace;
+                margin:1em 0;
+            }
+            p code {
+                display:inline;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="content">
+<h1>Developer's guide to using the Ajax version of PivotViewer</h1>
+<p>Last updated 4/23/2012</p>
+
+
+<h2>About this document</h2>
+
+<p>This should be enough to get started using the HTML PivotViewer control. It is not intended as a complete API reference.</p>
+
+
+<h2>Stuff you need on your page</h2>
+
+<p>The built version of the PivotViewer Javascript file is <code>seadragon-pivot-standalone-min.js</code>, or
+you can use the development version <code>seadragon-pivot-standalone-raw.js</code>. You will also need to
+include the <code>PivotView.css</code> stylesheet, which sets up styles for the elements within the
+viewer. Feel free to edit the styles to fit your preference (be careful with the positioning styles though, as they may have
+interesting side effects). In the same directory as the stylesheet, you'll need the <code>search.gif</code> icon file too.</p>
+
+
+<h2>Creating the Viewer</h2>
+
+<p>Option 1: Put it in your markup. This is the easiest option if you have already created a CXML file and want to display
+the same content to every visitor on the page. It will look something like this:</p>
+
+<code>&lt;div class="pivot_ajax_viewer"
+     data-collection="http://contoso.com/widgets.cxml"
+     data-use-hash="true"
+     style="width:1000px;height:600px;border:2px solid gray"&gt;
+    Oops, something went wrong! Make sure Javascript is enabled.
+&lt;/div&gt;</code>
+
+<p>If Javascript is disabled, the browser will display the fallback content. In order to use this method, the Pivot Ajax
+script must be included in your page markup (either in the head or body), and not delay loaded because it uses the
+window's load event. The <code>data-collection</code> attribute can be either a relative or absolute URL, just be sure that your
+server is returning an appropriate <code>Access-Control-Allow-Origin</code> header if you're using a collection hosted on another
+domain. Feel free to style the div however you like, of course. If you resize it, the viewer should adjust itself
+automatically. The <code>data-use-hash</code> attribute specifies that the viewer should change the URL hash to match its
+current state, and should try to read the URL hash when the page is loaded. If you only have one PivotViewer on the page and it
+won't conflict with any other page functionality, it probably makes sense to turn this feature on.</p>
+
+<p>If you use this method, you can skip the rest of this document because you already have a fully working viewer.</p>
+
+<p>Option 2: Call a function.</p>
+
+<p>As an example:</p>
+
+<code>var viewer = Pivot.init(document.getElementById("viewerDiv"));</code>
+
+<p>The init function is the only way to construct a Viewer object, to which you can then add content. You can make multiple
+Viewers on the page if you like.</p>
+
+
+<h2>Adding content to your Viewer</h2>
+
+<p>Option 1: If your content is represented by CXML, use the <code>CxmlLoader</code>. Here's an example:</p>
+
+<code>Pivot.CxmlLoader.load(viewer, "http://contoso.com/widgets.cxml");</code>
+
+<p>Option 2: For any other data source, you'll need to call several Viewer methods.</p>
+
+<p>You'll probably want to set a title for your collection. You can do this at any time.</p>
+
+<code>viewer.setTitle("Widget catalog");</code>
+
+<p>Next, you'll need to set up the "facet categories" or "pivot properties" for your collection. You can do this by a call
+to the Viewer's <code>setFacets</code> method. Let's set up our widget catalog with some basic facets:</p>
+
+<code>viewer.setFacets({
+    "Price (USD)": {
+        type: "Number",
+        isFilterVisible: true,
+        isWordWheelVisible: true,
+        isMetaDataVisible: true
+    },
+    Features: {
+        type: "String",
+        isFilterVisible: true,
+        isWordWheelVisible: true,
+        isMetaDataVisible: true
+    },
+    "Release Date": {
+        type: "DateTime",
+        isFilterVisible: true,
+        isWordWheelVisible: true,
+        isMetaDataVisible: true
+    },
+    "See also": {
+        type: "Link",
+        isFilterVisible: false,
+        isWordWheelVisible: false,
+        isMetaDataVisible: true
+    },
+    Availability: {
+        type: "String",
+        isFilterVisible: true,
+        isWordWheelVisible: true,
+        isMetaDataVisible: true,
+        orders: [{
+            name: "Most available",
+            order: [
+                "In stock",
+                "Short supply",
+                "Back ordered",
+                "Discontinued"
+            ]
+        }]
+    },
+    "Image URL": {
+        type: "String",
+        isFilterVisible: false,
+        isWordWheelVisible: false,
+        isMetaDataVisible: false
+    }
+});</code>
+
+<p>A few notes about the <code>setFacets</code> method:</p>
+
+<p>You may only call <code>setFacets</code> when there are no items in the collection. Valid types are <code>"String"</code>, <code>"LongString"</code> (which
+gets treated like String), <code>"Number"</code>, <code>"DateTime"</code>, and <code>"Link"</code>. <code>isFilterVisible</code> corresponds to whether the facet shows up
+in the filter selection pane and the sort order drop-down. <code>isWordWheelVisible</code> corresponds to whether the facet category
+will be accessible via the search box. <code>isMetaDataVisible</code> corresponds to whether the facet shows up in the details pane
+(on the right side of the viewer). Any facet is expected to support multiple values (in this example, note that "Features" is defined
+just like the other facets, despite the fact that one widget may have many features). Custom sort orders, as shown in
+"Availability", let you choose orders other than the default A-Z and quantity orders in the filter pane. Furthermore,
+the first custom order defined will be used for graph view on that facet category.</p>
+
+<p>Next, you may wish to set legal info for your collection. This step is completely optional; if you do it, the details
+pane will have a link at the bottom to the page you specify.</p>
+
+<code>viewer.setCopyright({
+    name: "Notices and Copyright Information",
+    href: "http://www.contoso.com/widgets/legal.html"
+});</code>
+
+<p>You'll also need to set up some templates that specify how to draw individual items onscreen, by calling the Viewer's
+<code>setTemplates</code> method. Like <code>setFacets</code>, this method may only be called while the collection is empty (either before you add
+any items, or after they have finished clearing).</p>
+
+<code>viewer.setTemplates([
+    {
+        type: "color",
+        width: 80,
+        height: 60,
+        template:
+            '&lt;?\
+                var map = {\
+                    "In stock": "#eee",\
+                    "Short supply": "gold",\
+                    "Back ordered": "orange",\
+                    Discontinued: "orangered"\
+                };\
+                map[facets.Availability[0]]\
+            ?&gt;'
+    },
+    {
+        type: "html",
+        width: 1000,
+        height: 750,
+        template:
+            '&lt;div style="position:absolute;top:0;bottom:0;left:0;\
+                         right:0;border:10px solid black;font-size:5em"&gt;\
+                &lt;div style="position:absolute;width:700px;height:730px;right:0"&gt;\
+                    &lt;?name?&gt;\
+                    &lt;br/&gt;\
+                    &lt;a href="&lt;?href?&gt;"&gt;\
+                        &lt;img src="&lt;?facets["Image URL"][0]?&gt;"/&gt;\
+                    &lt;/a&gt;\
+                &lt;/div&gt;\
+                &lt;div style="width:260px;height:430px;font-size:.5em;\
+                            padding:300px 0 0 10px;background:&lt;?\
+                    var map = {\
+                        "In stock": "#eee",\
+                        "Short supply": "gold",\
+                        "Back ordered": "orange",\
+                        Discontinued: "orangered"\
+                    };\
+                    map[facets.Availability[0]]\
+                ?&gt;"&gt;\
+                    &lt;?facets.Availability[0]?&gt;\
+                &lt;/div&gt;\
+            &lt;/div&gt;'
+    }
+]);</code>
+
+<p>The template system is confusing enough to deserve its own article, but we'll come back to it later. Suffice to say for
+now that anything inside <code>&lt;? ?&gt;</code> delimiters in the template gets evaluated in-place in the scope of the current item. You
+can have as many template levels as you like, but each one should have approximately the same aspect ratio. The width
+and height of each level specify the highest resolution at which it will be drawn, unless it's the biggest level.</p>
+
+<p>Once you have templates and facet categories set up, you can add the items to your collection. Each item should have a
+name, description, and URL as well as its facets. Each item must also have a unique ID string, which you may provide. If
+you don't provide an ID, one will be generated automatically. It's best to provide IDs for either all of your items or
+none of them, to avoid possible conflicts between your IDs and the auto-generated ones.</p>
+
+<code>viewer.addItems([
+    {
+        id: "789a",
+        name: "Widget type A",
+        description: "Our best selling widget yet!",
+        href: "http://store.contoso.com/789a",
+        facets: {
+            "Price (USD)": [7.99],
+            Features: ["Lifetime warranty", "Backward compatibility"],
+            "See also": [{
+                content: "Widget exchange",
+                href: "http://forums.contoso.com/widgetexchange"
+            }],
+            "Image URL": ["http://img.contoso.com/789a"],
+            Availability: ["In stock"],
+            "Release Date": [new Date("Sat, 01 Aug 2009 21:13:25 GMT")]
+        }
+    },
+    {
+        id: "789b",
+        name: "Widget type B",
+        description: "An alternative to the popular Type A",
+        href: "http://store.contoso.com/789b",
+        facets: {
+            "Price (USD)": [17.99],
+            "Image URL": ["http://img.contoso.com/789b"],
+            Availability: ["Short supply"],
+            "Release Date": [new Date("Sun, 01 Aug 2010 21:13:25 GMT")]
+        }
+    }
+]);</code>
+
+<p>A few notes about the <code>addItems</code> method:</p>
+
+<p>All item properties are optional. Each facet value, if provided, must be in an array even if there is only one value. If
+there are no values for a facet category, just leave that category out of the facets object. The facet category names
+are case sensitive.</p>
+
+
+<h2>What if your content changes?</h2>
+
+<p>In order to change data on an existing item, you should get a reference to the item, change something, and then call
+addItems with that item to make sure the viewer updates its data bindings.</p>
+
+<code>var widgetB = viewer.getItemById("789b");
+widgetB.facets.Availability[0] = "Back ordered";
+viewer.addItems([widgetB]);</code>
+
+<p>It is best to use this infrequently, and if you do, update as many items at once as you can. Each time you call <code>addItems</code>
+forces a sort-and-filter operation, which could be jarring from a user perspective.</p>
+
+<p>If you need to swap out the entire collection for something new, call the <code>clearItems</code> method. That will start animating
+the items offscreen, but you should wait for the <code>"itemsCleared"</code> custom event before trying to do anything else to the
+Viewer.</p>
+
+<code>viewer.clearItems();
+function addNewStuff() {
+    viewer.removeListener("itemsCleared", addNewStuff);
+    // now we can safely call setTemplates, setFacets, and addItems.
+    // .......
+}
+viewer.addListener("itemsCleared", addNewStuff);</code>
+
+
+<h2>Templates, revisited</h2>
+
+<p>Let's look in detail at a template example from earlier:</p>
+
+<code>viewer.setTemplates([
+    {
+        type: "html",
+        width: 1000,
+        height: 750,
+        template:
+            '&lt;div style="position:absolute;top:0;bottom:0;left:0;\
+                         right:0;border:10px solid black;font-size:5em"&gt;\
+                &lt;div style="position:absolute;width:700px;height:730px;right:0"&gt;\
+                    &lt;?name?&gt;\
+                    &lt;br/&gt;\
+                    &lt;a href="&lt;?href?&gt;"&gt;\
+                        &lt;img src="&lt;?facets["Image URL"][0]?&gt;"/&gt;\
+                    &lt;/a&gt;\
+                &lt;/div&gt;\
+                &lt;div style="width:260px;height:430px;font-size:.5em;\
+                            padding:300px 0 0 10px;background:&lt;?\
+                    var map = {\
+                        "In stock": "#eee",\
+                        "Short supply": "gold",\
+                        "Back ordered": "orange",\
+                        Discontinued: "orangered"\
+                    };\
+                    map[facets.Availability[0]]\
+                ?&gt;"&gt;\
+                    &lt;?facets.Availability[0]?&gt;\
+                &lt;/div&gt;\
+            &lt;/div&gt;'
+    }
+]);</code>
+
+<p>This is mostly a bunch of HTML, which will be rendered inside a container element that has absolute position and the
+width and height we requested (1000 x 750, in this case). Data binding to the item's properties is done by simple string
+replacement: anything inside <code>&lt;? ?&gt;</code> delimiters is evaluated within the scope of the item. This means you can access all
+of the same properties that you set in the <code>addItems</code> method call above. Of course, this also means that both the source of your
+content and the source of your templates must be fully trusted because an XSS attack against this system would be trivial. As you can see
+in this example, binding can be done within attributes or as separate nodes. Also, you're free to define new variables within the template;
+just make sure to use the <code>var</code> keyword so you don't pollute the global namespace. Just like any other HTML, you may define styles
+either in the page's stylesheets or inline.</p>
+
+<p>The reduce method on Array objects comes in handy for listing multiple values of a facet, as in this simple template
+which creates a list of all Features facets in an item:</p>
+
+<code>viewer.setTemplates([
+    {
+        type: "html",
+        width: 500,
+        height: 375,
+        template:
+            '&lt;ul&gt;\
+                &lt;?\
+                    facets.Features.reduce(function (previous, current) {\
+                        return previous + "&lt;li&gt;" + current + "&lt;/li&gt;";\
+                    }, "");\
+                ?&gt;\
+            &lt;/ul&gt;'
+    }
+]);</code>
+
+<p>Generally speaking, HTML templates look and feel great for the higher resolution levels but perform terribly for the
+lower levels where hundreds or thousands of items can be onscreen. What other options are there to keep performance up?</p>
+
+<p>The first option is a <code>"canvas"</code> type template, which uses canvas primitives instead of HTML. It might look something like
+this:</p>
+
+<code>viewer.setTemplates([
+    {
+        type: "canvas",
+        width: 100,
+        height: 75,
+        template: function (ctx, x, y, w, h, item) {
+            var map = {
+                "In stock": "#eee",
+                "Short supply": "gold",
+                "Back ordered": "orange",
+                Discontinued: "orangered"
+            };
+            ctx.strokeStyle = "black";
+            ctx.lineWidth = w / 100;
+            ctx.strokeRect(x + w / 200, y + w / 200, .99 * w, h - .01 * w);
+            ctx.fillStyle = map[item.facets.Availability[0]];
+            ctx.fillRect(x + w / 100, y + w / 100, .26 * w, .73 * w);
+        }
+    }
+]);</code>
+
+<p>The template is provided as a function. <code>ctx</code> is a canvas 2d context on which you can draw; <code>x</code> and <code>y</code> are the coordinates of
+the top left corner of the item's rectangle; <code>w</code> and <code>h</code> are the width and height of the rectangle you should be drawing in,
+and <code>item</code> is the current item object.</p>
+
+<p>Since we want to be able to load templates from JSON, you can also specify the same canvas method as a string:</p>
+
+<code>viewer.setTemplates([
+    {
+        type: "canvas",
+        width: 100,
+        height: 75,
+        template:
+            'var map = {\
+                "In stock": "#eee",\
+                "Short supply": "gold",\
+                "Back ordered": "orange",\
+                Discontinued: "orangered"\
+            };\
+            ctx.strokeStyle = "black";\
+            ctx.lineWidth = w / 100;\
+            ctx.strokeRect(x + w / 200, y + w / 200, .99 * w, h - .01 * w);\
+            ctx.fillStyle = map[item.facets.Availability[0]];\
+            ctx.fillRect(x + w / 100, y + w / 100, .26 * w, .73 * w);'
+    }
+]);</code>
+
+<p>The <code>"img"</code> and <code>"color"</code> template types are just shorthand for canvas operations that draw only an image or only a colored
+rectangle. They use the same string-replacement binding mechanism as the HTML templates, but should evaluate to an image
+URL or a CSS color, respectively.</p>
+
+<code>viewer.setTemplates([
+    {
+        type: "color",
+        width: 20,
+        height: 15,
+        template: "rgb(80,100,200)"
+    },
+    {
+        type: "color",
+        width: 40,
+        height: 30,
+        template:
+            '&lt;?\
+                var map = {\
+                    "In stock": "#eee",\
+                    "Short supply": "gold",\
+                    "Back ordered": "orange",\
+                    Discontinued: "orangered"\
+                };\
+                map[facets.Availability[0]]\
+            ?&gt;'
+    },
+    {
+        type: "img",
+        width: 160,
+        height: 120,
+        template: '&lt;?facets["Image URL"][0]?&gt;'
+    }
+]);</code>
+
+
+<h2>What about using DZI/DZC images in dynamic collections?</h2>
+
+<p>That is possible. Just set the <code>img</code> property of each item when you add them to the collection, and ignore templates
+entirely. The <code>img</code> property should point to a DZI file, or a DZC with a fragment identifying which image in the DZC to
+render.</p>
+
+<code>viewer.addItems([
+    {
+        id: "cat",
+        img: "http://contoso.com/endangeredspecies.dzc#11",
+        name: "African Golden Cat",
+        facets: {
+            /* it would probably have some facets too */
+        }
+    }
+]);</code>
+
+<p>If you want to use the deep zoom image at some resolutions and replace it with templated content at other resolutions,
+that is also possible. Just use a template type of <code>"sdimg"</code> and give it a maximum width and height at which to render.</p>
+
+<code>viewer.setTemplates([
+    {
+        type: "sdimg"
+        width: 500,
+        height: 375
+    },
+    {
+        type: "html",
+        width: 1000,
+        height: 750,
+        template:
+            '&lt;div style="position:absolute;top:0;bottom:0;left:0;\
+                         right:0;border:10px solid black;font-size:5em"&gt;\
+                &lt;div style="position:absolute;width:700px;height:730px;right:0"&gt;\
+                    &lt;?name?&gt;\
+                    &lt;br/&gt;\
+                    &lt;a href="&lt;?href?&gt;"&gt;\
+                        &lt;img src="&lt;?facets["Image URL"][0]?&gt;"/&gt;\
+                    &lt;/a&gt;\
+                &lt;/div&gt;\
+                &lt;div style="width:260px;height:430px;font-size:.5em;\
+                            padding:300px 0 0 10px;background:&lt;?\
+                    var map = {\
+                        "In stock": "#eee",\
+                        "Short supply": "gold",\
+                        "Back ordered": "orange",\
+                        Discontinued: "orangered"\
+                    };\
+                    map[facets.Availability[0]]\
+                ?&gt;"&gt;\
+                    &lt;?facets.Availability[0]?&gt;\
+                &lt;/div&gt;\
+            &lt;/div&gt;'
+    }
+]);</code>
+
+
+<h2>Can I customize the details pane?</h2>
+
+<p>No, but you may create your own. There are custom events that would allow you to show or hide your own content if you
+like: <code>"showDetails"</code> and <code>"hideDetails"</code>. The Viewer object inherits from
+<code>Seadragon2.EventManager</code>, so you can use its methods to listen for updates.</p>
+
+<code>viewer.addListener("showDetails", function (item) {
+    // do something awesome with that item here
+    alert(item.name);
+});
+viewer.addListener("hideDetails", function () {
+    // stop doing something awesome
+});</code>
+
+<p>If you really want to build your own details pane, it is possible, just rather a lot of work. You should set up the
+event handlers and such after you create your viewer but before you add any content:</p>
+
+<code>// first, disable the default details pane
+viewer.clearListeners("showDetails");
+viewer.clearListeners("hideDetails");
+
+// next, set up event handlers to open and close details pane
+viewer.addListener("showDetails", function (item) {
+    // add details pane to page
+});
+viewer.addListener("hideDetails", function () {
+    // remove details pane
+});</code>
+
+<p>In the details pane you build, you may provide left, right, and collapse buttons if you like. Their handlers should call
+the following functions (this is the same as what the default details pane does):</p>
+
+<code>leftButton.onclick = function () { viewer.moveLeft(); };
+rightButton.onclick = function () { viewer.moveRight(); };
+collapseButton.onclick = function () { viewer.collapseDetails(); };</code>
+
+<p>Calling <code>viewer.collapseDetails()</code> will raise a <code>"hideDetails"</code> event, which you should respond to normally.</p>
+
+<p>Likewise, you can override the behavior of the viewer's <code>"showInfoButton"</code> and <code>"hideInfoButton"</code> custom events if you want
+to modify the collapsed state of the details pane.</p>
+        </div>
+    </body>
+</html>

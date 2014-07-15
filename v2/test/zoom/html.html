@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
+    <div id="tiger" style="width:500px;height:500px;position:relative;overflow:hidden;font-size:10px;border:thin solid black">
+        <div style="background:green;width:30em;height:30em;float:left">
+            <input type="button" value="click me"/>
+        </div>
+        <p style="margin:0">Quisque sed tellus at ipsum eleifend vestibulum at ac nisl. Praesent iaculis urna ac erat venenatis facilisis. Pellentesque tincidunt gravida magna at lacinia. Donec sapien felis, euismod non viverra nec, tempus id metus. Aliquam at magna dolor, at vulputate elit. Ut iaculis scelerisque purus, vel ullamcorper mauris viverra id. Nam eu pretium augue. Etiam malesuada sollicitudin hendrerit. Duis at purus justo, porttitor blandit urna. Pellentesque molestie justo at est interdum sodales. Sed viverra, odio quis pretium convallis, purus est dapibus mauris, id pellentesque elit diam vitae mauris. Donec sollicitudin porta pharetra. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Nam id arcu eget felis consectetur feugiat. Mauris magna enim, egestas ut sodales non, sollicitudin sed urna. Nullam imperdiet semper est, et suscipit nulla malesuada vitae.</p>
+    </div>
+    <script src="../../src/load.js?target=zoom"></script>
+    <script>
+        var viewer = new Seadragon2.Viewer(document.getElementById("tiger"), {
+            viewportOptions: {
+                maxZoom:10,
+                minZoom:.4,
+                visibilityRatio:.5
+            }
+        });
+    </script>
+</body>
+</html>

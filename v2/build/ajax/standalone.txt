@@ -1,0 +1,6 @@
+core/Seadragon.js
+utils/Debug.js
+utils/Function.js
+utils/Xml.js
+utils/Xml_fetch.js
+utils/Xml_parse.js

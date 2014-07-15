@@ -1,0 +1,8 @@
+/*jslint onevar: false, white: false */
+
+// make local references to commonly used global objects. this improves
+// performance, and the local variable names can also be munged (crunched).
+(function (document, Date, Math, undefined) {
+
+// ECMAScript 5 strict mode pragma, for newer browsers and JSLint
+// "use strict";

@@ -1,0 +1,729 @@
+/**
+ * Copyright (c) Microsoft Corporation
+ * All rights reserved. 
+ * BSD License
+ *
+ * Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
+ * following conditions are met:
+ *
+ * Redistributions of source code must retain the above copyright notice, this list of conditions and the following
+ * disclaimer.
+ *
+ * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following
+ * disclaimer in the documentation and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS ""AS IS"" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+ * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE
+ */
+
+.pivot {
+    text-align:left;
+    font-family:"Segoe UI",sans-serif;
+    color:#333;
+    font-size:13px;
+}
+
+.pivot a {
+    color:#36a3d8;
+}
+
+.pivot a:visited {
+    color:#36a3d8;
+}
+
+div.pivot {
+    background:white;
+}
+
+dl.pivot {
+    clear:both;
+    margin-bottom:0;
+}
+
+h2.pivot {
+    clear:both;
+    font-size:1.25em;
+    font-weight:normal;
+    position:relative;
+    top:5px;
+    padding:3px;
+}
+
+div.pivot_viewbox {
+    height:100%;
+    width:100%;
+    position:relative;
+    overflow:hidden;
+}
+
+div.pivot_topbar {
+    width:100%;
+    height:28px;
+    line-height:22px;
+    border-bottom:1px solid #ccc;
+    box-shadow:0px 0px 8px #ccc;
+    -moz-box-shadow:0px 0px 8px #ccc;
+    -webkit-box-shadow:0px 0px 8px #ccc;
+    -o-box-shadow:0px 0px 8px #ccc;
+    background-color:#f2f2f2;
+}
+
+.pivot_topbar * {
+    margin:3px;
+}
+
+.pivot_input {
+    position:fixed;
+    top:-100px;
+}
+
+div.pivot_title {
+    float:left;
+    background-color:transparent;
+    font-weight:bold;
+    padding-left:5px;
+}
+
+div.pivot_pane {
+    border:1px solid #ccc;
+    width:200px;
+    position:absolute;
+    top:5px;
+    bottom:5px;
+    box-shadow:0px 0px 8px #ccc;
+    -moz-box-shadow:0px 0px 8px #ccc;
+    -webkit-box-shadow:0px 0px 8px #ccc;
+    -o-box-shadow:0px 0px 8px #ccc;
+    border-radius:5px;
+    -webkit-border-radius:5px;
+    -o-border-radius:5px;
+    -moz-border-radius:5px;
+    -webkit-transition:opacity .5s linear;
+    -moz-transition:opacity .5s linear;
+    -o-transition:opacity .5s linear;
+    -ms-transition:opacity .5s linear;
+    transition:opacity .5s linear;
+}
+
+.pivot_filterpane {
+    left:5px;
+    padding:2px 2px 10px;
+    cursor:default;
+    overflow-y:auto;
+}
+
+.pivot_filterpane form {
+    clear:both;
+    border:1px solid #ccc;
+    padding:2px;
+    margin:2px 1px 0px 2px;
+    position: relative;
+}
+
+.pivot_searchbox {
+    border-width:0;
+    width:175px;
+    margin:0;
+    padding:0;
+    font-size:12px;
+    font-family:"Segoe UI", sans-serif;
+}
+
+.pivot_searchbox:focus {
+    border-width:0;
+}
+
+.pivot_watermark .pivot_searchbox {
+    color:#888;
+    font-family:"Segoe UI", sans-serif;
+}
+
+.pivot_results {
+    position:absolute;
+    overflow:hidden;
+    background:white;
+    font-size:.8em;
+    border:1px solid #ccc;
+    z-index:1;
+}
+
+.pivot_results li {
+    overflow:hidden;
+    white-space:nowrap;
+}
+
+.pivot_results li:hover,
+.pivot_results li.pivot_highlight {
+    background:#a7d5ec;
+}
+
+div.pivot_detailspane {
+    right:5px;
+    font-size:.8em;
+    padding:8px;
+}
+
+.pivot_filterable {
+    cursor:default;
+}
+
+.pivot_filterable:hover {
+    background:#c0d6e2;
+}
+
+.pivot_detailspane dd:nth-of-type(odd),
+.pivot_detailspane dt:nth-of-type(odd) {
+    background:#e6e6e6;
+}
+
+.pivot_detailspane dd:nth-of-type(even),
+.pivot_detailspane dt:nth-of-type(even) {
+    background:#f2f2f2;
+}
+
+div.pivot_faded {
+    opacity:0.2;
+}
+
+div.pivot_faded:hover {
+    opacity:1;
+}
+
+div.pivot_canvas {
+    position:absolute;
+    top:29px;
+    bottom:0px;
+    width:100%;
+    overflow:hidden;
+    background:#f2f2f2;
+}
+
+div.pivot_layer {
+    position:absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:transparent;
+}
+
+canvas.pivot {
+    width:100%;
+    height:100%;
+    position:relative;
+}
+
+.pivot_sorttools {
+    display:block;
+    float:right;
+    font-size:12px;
+}
+
+select.pivot_sorttools {
+    margin-top:4px;
+    border:solid 1px transparent;
+    background:#f2f2f2;
+}
+
+.pivot_subtle {
+    color:gray;
+}
+
+.pivot_sortlabel {
+    background:#e1f1f9;
+    float:left;
+    margin:3px;
+    cursor:default;
+    padding:2px;
+}
+
+.pivot_sortlabel:hover {
+    background:#c2e3f3;
+}
+.pivot_watermark + div.pivot_facetname {
+    border-top-width:0px;
+}
+div.pivot_facetname {
+    clear:both;
+    border-top: 1px solid #ccc;
+    margin-left:3px;
+    padding:3px 0 6px 2px;
+}
+
+div.pivot_facetname:hover {
+    background:#ebf6fb;
+}
+
+ul.pivot {
+    list-style-type:none;
+    padding:0px;
+    margin:0px;
+    clear:both;
+}
+
+div.pivot_facetvalues {
+    clear:both;
+    overflow-x:hidden;
+    overflow-y:auto;
+    font-size:12px;
+    white-space:nowrap;
+    -webkit-transition:height .5s ease-in-out;
+    -moz-transition:height .5s ease-in-out;
+    -o-transition:height .5s ease-in-out;
+    -ms-transition:height .5s ease-in-out;
+    transition:height .5s ease-in-out;
+}
+
+div.pivot_facetvalues li {
+    clear:both;
+    position:relative;
+    padding-left:20px;
+    margin:3px 0;
+}
+
+.pivot_numberlabel {
+    height:2em;
+    font-style:italic;
+    color:gray;
+}
+
+.pivot_filtergraph {
+    height:70px;
+    position:relative;
+    margin:0 3px 5px;
+}
+
+.pivot_filtergraphbar {
+    position:absolute;
+    background:#9ad1eb;
+    bottom:0;
+}
+
+.pivot_sliderouter {
+    background:#e0e1e2;
+    height:14px;
+    position:relative;
+    margin:3px;
+}
+
+.pivot_deselected {
+    background:#dadada;
+}
+
+.pivot_slider {
+    margin:0 6px;
+    height:12px;
+    border:1px solid white;
+    position:absolute;
+    left:0;
+    right:0;
+    background:#a0d4ec;
+    cursor:pointer;
+}
+
+.pivot_slider:hover {
+    background:#73b6d6;
+}
+
+.pivot_sliderhandle {
+    position:absolute;
+    width:6px;
+    height:16px;
+    top:-2px;
+    border:1px solid white;
+    background:#91d2ef;
+}
+
+.pivot_sliderhandle:hover,
+.pivot_slider:hover  ~ .pivot_sliderhandle {
+    background:#5aabd3;
+}
+
+.pivot_sliderleft {
+    left:0;
+    margin-left:-1px;
+    cursor:w-resize;
+}
+
+.pivot_sliderright {
+    right:0;
+    margin-right:-1px;
+    cursor:e-resize;
+}
+
+.pivot_left {
+    float:left;
+}
+
+.pivot_right {
+    float:right;
+}
+
+div.pivot_zoomslider {
+    width:140px;
+    height:20px;
+    border:1px solid #ccc;
+    position:relative;
+    background:#f2f2f2;
+}
+
+.pivot_zoomout,
+.pivot_zoomin {
+    font-weight:bold;
+    height:20px;
+    width:15px;
+    text-align:center;
+    line-height:20px;
+    cursor:default;
+    margin:0;
+}
+
+.pivot_zoomin {
+    position:absolute;
+    top:0;
+    right:0;
+}
+
+.pivot_zoomline {
+    height:4px;
+    position:absolute;
+    top:8px;
+    right:20px;
+    left:20px;
+    background:#bfbfbf;
+    margin:0;
+}
+
+.pivot_zoomhandle {
+    height:16px;
+    width:6px;
+    position:absolute;
+    top:-6px;
+    background:#5a7787;
+    cursor:e-resize;
+    margin:0;
+}
+
+.pivot_zoomhandle:hover {
+    background:#82b5ce;
+}
+
+.pivot_disabled {
+    color:#ccc;
+}
+
+.pivot_outerlabel:hover {
+    background:#dff0f9;
+}
+
+dd.pivot {
+    color:#36a3d8;
+    margin:0px;
+    padding:1px 4px 3px 4px;
+}
+
+dt.pivot {
+    padding:3px 4px 1px 4px;
+}
+
+div.pivot_facetcount {
+    float:right;
+    color:gray;
+}
+
+.pivot_facetcheckbox {
+    margin:0;
+    padding:0;
+    position:absolute;
+    left:3px;
+    top:3px;
+}
+
+div.pivot_facetlabel {
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+
+.pivot_clrbtn {
+    color:red;
+    font-weight:bold;
+    padding:0px 2px 2px 2px;
+    float:right;
+}
+
+.pivot_clrlabel {
+    float:right;
+    font-size:12px;
+    padding:4px 0 0 4px;
+    margin-right:2px;
+    margin-bottom:2px;
+}
+
+.pivot_clrlabel .pivot_clrbtn {
+    font-size:16px;
+    margin-top:-4px;
+    visibility:inherit;
+    position:relative;
+}
+.pivot_facetname .pivot_clrbtn {
+    font-size:16px;
+    position:relative;
+    top:-3px;
+}
+.pivot_clr {
+    visibility:hidden;
+}
+
+.pivot_searchbtn {
+    background:url('search.gif') no-repeat 2px 0;
+    color:transparent;
+    width:19px;
+    height:19px;
+    position:absolute;
+    top:1px;
+    right:1px;
+    text-align:center;
+    font-weight:bold;
+}
+
+.pivot_grid {
+    background:url('search.gif') no-repeat -15px 0;
+    width:29px;
+    height:20px;
+    border:1px solid #ccc;
+    border-right-width:0px;
+    margin-right:0;
+}
+
+.pivot_graph {
+    background:url('search.gif') no-repeat -44px 0;
+    width:29px;
+    height:20px;
+    border:1px solid #ccc;
+    margin-left:0;
+}
+
+.pivot_activesort {
+    background-color:#d6d8d9;
+}
+
+.pivot_hoverable:hover {
+    background-color:#a3d1e8;
+}
+
+.pivot_disabled:hover {
+    background:transparent;
+}
+
+.pivot_clrsearch {
+    color:red;
+    background:transparent;
+}
+
+.pivot_searchbtn:hover, .pivot_clr:hover {
+    background-color:#b8dcec;
+}
+
+.pivot_watermark .pivot_searchbtn:hover {
+    background-color:transparent;
+}
+
+.pivot_watermark .pivot_searchbtn {
+    opacity:0.4;
+}
+.pivot_filterpane form .pivot_clr {
+    visibility:inherit;
+}
+
+.pivot_horizbar {
+    height:1px;
+    background:#ccc;
+}
+
+div.pivot_horizbar {
+    margin:0 2px;
+}
+
+.pivot_copyright {
+    position:absolute;
+    bottom:3px;
+    left:3px;
+    font-size:.75em;
+}
+
+.pivot_copyright a {
+    color:gray;
+}
+
+.pivot_copyright a:visited {
+    color:gray;
+}
+
+div.pivot_scrollable {
+    overflow-x:hidden;
+    overflow-y:auto;
+}
+
+div.pivot_description {
+    overflow:hidden;
+}
+
+.pivot_vertbar {
+    margin-top:3px;
+}
+
+.pivot_larr {
+    width:14px;
+    height:14px;
+    background:url('search.gif') no-repeat 0 -20px;
+    margin:3px 3px 3px 0px;
+}
+
+.pivot_rarr {
+    width:14px;
+    height:14px;
+    background:url('search.gif') no-repeat -14px -20px;
+    margin:3px;
+}
+
+.pivot_collapse {
+    width:14px;
+    height:14px;
+    background:url('search.gif') no-repeat -28px -20px;
+    margin:3px;
+}
+
+.pivot_info {
+    background:url('search.gif') no-repeat -42px -20px;
+    height:22px;
+    width:22px;
+    position:absolute;
+    right:10px;
+    top:10px;
+    -webkit-transition:opacity .5s linear;
+    -moz-transition:opacity .5s linear;
+    -o-transition:opacity .5s linear;
+    -ms-transition:opacity .5s linear;
+    transition:opacity .5s linear;
+}
+
+.pivot_info:hover {
+    background-position:0 -34px;
+}
+
+.pivot_bar * {
+    -webkit-transition:background-color .2s ease-in-out;
+    -moz-transition:background-color .2s ease-in-out;
+    -o-transition:background-color .2s ease-in-out;
+    -ms-transition:background-color .2s ease-in-out;
+    transition:background-color .2s ease-in-out;
+    position:absolute;
+}
+
+.pivot_bar {
+    position:absolute;
+    width:98px;
+}
+
+.pivot_bar .pivot_leftlabel {
+    position:relative;
+    float:left;
+    width:66%;
+    text-align:left;
+}
+
+.pivot_bar .pivot_rightlabel {
+    right:0;
+    width:50%;
+    text-align:right;
+}
+
+div.pivot_outerbar {
+    background:#eff1f3;
+    width:100%;
+    top:0;
+    bottom:42px;
+}
+
+.pivot_bar:nth-child(even) .pivot_outerbar {
+    background:#eaecee;
+}
+
+div.pivot_innerbar {
+    background:#d7d8da;
+    width:90px;
+    left:4px;
+    bottom:4px;
+}
+
+.pivot_bar:nth-child(even) .pivot_innerbar {
+    background:#d2d4d5;
+}
+
+div.pivot_barlabel {
+    background:#f5f5f5;
+    width:100%;
+    bottom:0;
+    text-align:center;
+    padding-top:5px;
+    height:35px;
+    font-family:"Segoe UI Light","Segoe UI",sans-serif;
+}
+
+.pivot_bar:nth-child(even) .pivot_barlabel {
+    background:#f0f2f2;
+}
+
+.pivot_bar.pivot_highlight .pivot_outerbar {
+    background:#d1e4ee;
+}
+
+.pivot_bar.pivot_highlight .pivot_innerbar {
+    background:#c3ced6;
+}
+
+.pivot_bar.pivot_highlight .pivot_barlabel {
+    background:#95c6dd;
+}
+
+.pivot_item {
+    position:absolute;
+    overflow:hidden;
+}
+
+.pivot_hoverborder {
+    position:absolute;
+    background:#99ccff;
+}
+
+.pivot_selectedborder {
+    position:absolute;
+    background:#6496ff;
+}
+
+/* cursor overrides */
+/* If you want the cursor to change during drags, specify it here. */
+/*.pivot_move,
+.pivot_move * {
+    cursor:move;
+}*/
+
+.pivot_eresize,
+.pivot_eresize * {
+    cursor:e-resize;
+}
+
+.pivot_wresize,
+.pivot_wresize * {
+    cursor:w-resize;
+}
+
+.pivot_pointer,
+.pivot_pointer * {
+    cursor:pointer;
+}

@@ -1,0 +1,3 @@
+
+// passing references to commonly used global objects
+}(document, Date, Math));

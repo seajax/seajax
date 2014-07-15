@@ -1,0 +1,39 @@
+html { font-family: "Segoe UI"; }
+h2
+{
+    font-size: 1.5em;
+    margin: 1em 0 0 0;
+    background-color: #666;
+    color: White;
+    text-align: center;
+}
+p { margin: 0; }
+.failed { color: Red; }
+.passed { color: Green; }
+.warning { color: Orange; }
+.h2box { background-color: #DDD; border: 4px solid #666; border-top: 0; }
+.h2box p { padding-left: .25em; }
+/*.mc10 { -moz-column-width: 10em; -webkit-column-width: 10em; }*/
+.mc30 { -moz-column-width: 30em; -webkit-column-width: 30em; }
+#rate { padding: 0 2em 0 .5em; }
+#pct-tests-completed { font-size: 2em; font-weight: bold; text-align: right; padding: 2px; }
+#pct-tests-selected  { font-size: 2em; font-weight: bold; text-align: right; padding: 2px; }
+#pct-tests-pass      { font-size: 2em; font-weight: bold; text-align: right; padding: 2px; }
+#stats { text-align: center; }
+#stats td { padding: 3px 6px 3px 6px; }
+#stats td:first-child { background-color: #BBB; }
+#stats tr:first-child { background-color: #BBB; }
+#fail-list { padding-left: .5em; }
+.suite H3 
+{
+    font-size: 1em;
+    margin: 0 0 0 0;
+    padding-left: 0.5em;
+    background-color: #888;
+    color: White;
+}
+.tests
+{
+    padding-left: 0.5em;
+    -moz-column-width: 10em; -webkit-column-width: 10em;
+}

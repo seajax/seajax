@@ -1,0 +1,1 @@
+python ..\Build\Scripts\seajax_v2.py

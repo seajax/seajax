@@ -1,0 +1,60 @@
+<html>
+<head>
+    <title>Seajax v2 Unit Test Help Page</title>
+</head>
+<body>
+    <h1>Seajax v2 Unit Test Help Page</h1>
+    <p>
+    This here is only bare-bones information.  More to follow.
+    </p>
+
+    <h2>Introduction</h2>
+
+        <p>Test path is [suite-name]_[test-name]</p>
+
+    <h2>Configuration</h2>
+
+        <p>
+        Execution and reporting of unit tests is somewhat configurable via the test
+        page url.  Configuration parameters are provided as url parameters.
+        </p>
+
+        <h3>filter</h3>
+        <p>
+        This setting is a regex expression that is matched against each test's path,
+        which consists of its suite name followed by and underscore followed by the
+        specific test's name.  For matches, the specific test is run; otherwise, the
+        specific test is not run.  The default filter is empty.
+        </p>
+
+        <h3>priority</h3>
+        Suites and or tests are assigned to a priority level.  The default level is
+        zero.  Specifying this configuration setting allows running of tests with
+        priority greater than zero.  For a specified priority level N here, all tests
+        with assigned priority less than or equal to N are run.
+
+        <h3>tags</h3>
+        Tags provide another angle for selecting subsets of tests.  Suites and tests
+        can be assigned a tag.  By selecting one or more tags in the configuration
+        setting (separated by comma), only those tests that have one of these tags
+        are run.
+
+        <h3>reportTo</h3>
+        By default, test results are displayed visually on the unit test page.  This
+        setting allows for reporting the results to some service.  If provided, the
+        value must be an absolute http url path.  The test results, in JSON format,
+        will be POSTed to this url once all tests complete.
+
+    <h2>Running Tests</h2>
+
+        <p>
+        Selected tests can be re-run simply by refreshing the page.
+        </p>
+
+    <h2>Adding Tests</h2>
+
+        <h3>Test Suites</h3>
+
+        <h3>Test Functions</h3>
+</body>
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="description" content="In this test, we use sizing ratios to put big HTML content in a little content coordinate space."/>
+</head>
+<body>
+    <div id="tiger" style="width:500px;height:500px;position:relative;overflow:hidden;border:thin solid black">
+    </div>
+    <h2>Template:</h2>
+    <div class="template" style="width:100px;height:100px;border:medium solid green;overflow:hidden;position:absolute">
+        <p style="margin:0">Quisque sed tellus at ipsum eleifend vestibulum at ac nisl.</p>
+    </div>
+    <script src="../../src/load.js?target=zoom"></script>
+    <script>
+        var container = document.getElementById("tiger");
+        var zoomContainer = new Seadragon2.HTMLZoomContainer(container);
+        zoomContainer.setSizeRatio(10);
+        var viewer = new Seadragon2.Viewer(container, {
+            viewportOptions: {
+                maxZoom:100,
+                minZoom:.4,
+                visibilityRatio:.5
+            },
+            zoomContainers: [
+                zoomContainer
+            ]
+        });
+        var template = document.getElementsByClassName("template")[0];
+        var i, item;
+        for (i = 0; i < 50; i++) {
+            item = template.cloneNode(true);
+            zoomContainer.setLocation(item, new Seadragon2.Rect(i * 10, i * 10, 10, 10));
+            container.firstChild.appendChild(item);
+        }
+    </script>
+</body>
+</html>
