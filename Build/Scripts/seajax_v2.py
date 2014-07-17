@@ -90,7 +90,7 @@ def build_specific(target, type):
     try:
         call(["ajaxmin", PATH_OUTPUT_FILE % (target, type, "raw"), "-out", PATH_OUTPUT_FILE % (target, type, "min")])
     except OSError:
-        print "Error in trying to call ajaxmin. Make sure it is installed and on the path. Outputting unminified..."
+        print("Error in trying to call ajaxmin. Make sure it is installed and on the path. Outputting unminified...")
         writefile(PATH_OUTPUT_FILE % (target, type, "min"), concatenated)
 
 def build(changenum):
