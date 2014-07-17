@@ -169,23 +169,23 @@ if __name__ == "__main__":
     from sys import argv, exit
     
     if len(argv) <= 1:
-        print
-        print "Usage:"
-        print "python file_helpers.py {command} [{args...}]"
-        print 
-        print "Example:"
-        print "python file_helpers.py copytree foo/bar foo/baz"
-        print 
-        print "Only copytree is available from the command line currently."
+        print()
+        print("Usage:")
+        print("python file_helpers.py {command} [{args...}]")
+        print ()
+        print("Example:")
+        print("python file_helpers.py copytree foo/bar foo/baz")
+        print()
+        print("Only copytree is available from the command line currently.")
         
     elif argv[1] != "copytree":
-        print "Error: unrecognized command. Currently, only copytree is supported. Sorry!"
+        print("Error: unrecognized command. Currently, only copytree is supported. Sorry!")
     
     elif len(argv) < 4:
-        print "Error: copytree requires {src} and {dst} args."
+        print("Error: copytree requires {src} and {dst} args.")
     
     elif len(argv) > 4:
-        print "Error: copytree via the command line doesn't support the {binary} or {transform} args."
+        print("Error: copytree via the command line doesn't support the {binary} or {transform} args.")
     
     else:
         copytree(argv[2], argv[3])
