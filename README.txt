@@ -13,7 +13,7 @@ This repository also contains code for creating a control that mimics the PivotV
 can filter and sort a deep zoom collection. Collection data can come from a CXML file or be added dynamically on the
 client. For more info on setting up a page using this PivotViewer implementation, see v2/app/pivot/quickstart.html.
 Unlike the library portion, which aims to support every major browser, PivotViewer requires a browser with the <canvas>
-element, meaning IE8 and earlier are unsupported.
+element, meaning IE8 and earlier are unsupported. A demo collection can be seen at http://seajax.github.io/ .
 
 As a historical note, most of this code was written in 2010 and was targeted at mouse interaction, so updates may be
 needed for newer browsers and touch interaction.
