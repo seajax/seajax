@@ -31,6 +31,8 @@ interaction.
 
 # Setup
 
+First, install development tools using `npm install`.
+
 - 	**Windows:** To build all outputs, run
 	[`Build/Scripts/seajax_v2.py`](./Build/Scripts/seajax_v2.py) using Python 2
 	or 3.
