@@ -79,13 +79,15 @@
     
     // step 4: finally, include the specified source files via <script> tags
     var filelist = xhr.responseText.replace("\r\n", "\n").split('\n');
-    for (var i = 0; i < filelist.length; i++) {
+    for (i = 0; i < filelist.length; i++) {
+        /*jshint evil: true */
         document.write([
             '<script src="',
             thisPath,
             filelist[i],
             '"></script>'
         ].join(''));
+        /*jshint evil: false */
     }
 
 }());
