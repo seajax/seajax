@@ -6,3 +6,6 @@
 
 # npm
 /node_modules/
+
+# Sublime Text
+seadragon.sublime-workspace
