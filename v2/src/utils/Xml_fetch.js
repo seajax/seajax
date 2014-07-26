@@ -23,7 +23,7 @@
 // Defines the Seadragon2.Xml.fetch() method.
 
 /*global SD, SDXml, SDDebug_warn, SDDebug_error, SDFunction_EMPTY, ActiveXObject, XDomainRequest */
-/*jslint strict: false */
+/*jshint strict: false */
 
 var
 

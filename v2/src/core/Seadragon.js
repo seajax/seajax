@@ -23,7 +23,7 @@
 // Defines the Seadragon namespace.
 
 /*global Seadragon: true */
-/*jslint strict: false */
+/*jshint strict: false */
 
 /**
  *  The global Seadragon namespace. All Seadragon objects are defined within

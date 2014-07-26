@@ -24,7 +24,7 @@
 
 /*global SD, SDXml_parse, SDDisplayRect, SDRect, SDDziTileSource$, SDDzcTileSource$
  SDNetwork_tryMakeXmlHttpRequest, SDDebug_warn*/
-/*jslint strict: false */
+/*jshint strict: false */
 
 var
     

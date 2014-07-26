@@ -23,7 +23,7 @@
 // Defines the Seadragon2.Event class and its $() method.
 
 /*global SD, event */
-/*jslint strict: false */
+/*jshint strict: false */
 
 var
 

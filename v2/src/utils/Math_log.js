@@ -23,7 +23,7 @@
 // Defines the Seadragon2.Math.log(), log2() and log10() methods.
 
 /*global SDMath */
-/*jslint strict: false */
+/*jshint strict: false */
 
 var
 

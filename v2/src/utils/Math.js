@@ -23,7 +23,7 @@
 // Defines the Seadragon2.Math class.
 
 /*global SD */
-/*jslint strict: false */
+/*jshint strict: false */
 
 var
 

@@ -23,7 +23,7 @@
 // Defines the Seadragon2.Canvas class.
 
 /*global SD, SDSize, SDRect, SDObject_extend, SDDebug_warn */
-/*jslint strict: false */
+/*jshint strict: false */
 
 var
 

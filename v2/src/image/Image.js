@@ -28,7 +28,7 @@
   SDElement_registerCustomElement, SDMath_log2, SDElement_getBoundingClientRect,
   SDDrawer_nullDrawer, SDImageState, SDEvent_raise, SDMath_floor, SDDeepZoom_fetchTileSource,
   SDTileSource*/
-/*jslint strict: false */
+/*jshint strict: false */
 
 var
 

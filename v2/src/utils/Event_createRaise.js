@@ -23,7 +23,7 @@
 // Defines the Seadragon2.Event class.
 
 /*global SDEvent, SDDebug_error, SDFunction_EMPTY */
-/*jslint strict: false */
+/*jshint strict: false */
 
 var
 

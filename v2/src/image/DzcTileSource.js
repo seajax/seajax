@@ -23,7 +23,7 @@
 // Defines the Seadragon2.DzcTileSource class.
 
 /*global SD, SDRect, SDTileInfo, SDTileSource, SDMath_reverseMorton, SDDeepZoom_fetchTileSource*/
-/*jslint strict: false */
+/*jshint strict: false */
 
 /**
  * A TileSource representing a single item in a deep zoom collection.

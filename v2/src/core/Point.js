@@ -23,7 +23,7 @@
 // Defines the Seadragon2.Point class.
 
 /*global SD, SDSize */
-/*jslint strict: false */
+/*jshint strict: false */
 
 /**
  *  Represents a 2D point. This class encourages immutability -- all instance

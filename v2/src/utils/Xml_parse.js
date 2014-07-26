@@ -23,7 +23,7 @@
 // Defines the Seadragon2.Xml.parse() method.
 
 /*global SD, SDXml, SDDebug_error, SDFunction_EMPTY, DOMParser, ActiveXObject */
-/*jslint strict: false */
+/*jshint strict: false */
 
 var
 

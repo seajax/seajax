@@ -23,7 +23,7 @@
 // Defines the Seadragon2.DisplayRect class.
 
 /*global SD, SDRect */
-/*jslint strict: false */
+/*jshint strict: false */
 
 var
 

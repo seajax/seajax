@@ -23,7 +23,7 @@
 // Defines the Seadragon2.TileInfo class.
 
 /*global SD, SDRect_$ */
-/*jslint strict: false */
+/*jshint strict: false */
 
 var
 

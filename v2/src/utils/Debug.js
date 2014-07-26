@@ -23,7 +23,7 @@
 // Defines the Seadragon2.Debug class.
 
 /*global SD, SDString_format */
-/*jslint strict: false */
+/*jshint strict: false */
 
 var
 
