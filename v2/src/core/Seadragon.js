@@ -22,7 +22,7 @@
 // Seadragon2.js
 // Defines the Seadragon namespace.
 
-/*global Seadragon: true */
+/*global Seadragon2: true */
 /*jshint strict: false */
 
 /**
