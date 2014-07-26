@@ -22,7 +22,7 @@
 // Network.js
 // Defines the Seadragon2.Network class.
 
-/*global SD, SDDebug_warn, SDDebug_error, SDUri_getHostname, ActiveXObject */
+/*global SD, SDDebug_warn, SDDebug_error, SDUri_getHostname, ActiveXObject, SDXml_fetch, SDFunction_delay */
 /*jshint strict: false */
 
 var

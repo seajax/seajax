@@ -21,7 +21,7 @@
 
 // ImageManager.js
 // defines the Seadragon2.ImageManager class
-/*global SDDebug_log, SD, SDImage*/
+/*global SDDebug_log, SD, SDImage, SDTimer */
 
 var
 

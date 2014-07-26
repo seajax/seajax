@@ -19,7 +19,7 @@
 // WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE
 
-/*global SDDebug_error*/
+/*global SDDebug_error, SDTileInfo_$ */
 
 function Tile(level, col, row, source, tileBelow) {
     var info = SDTileInfo_$(source.getTileInfo(level, col, row));

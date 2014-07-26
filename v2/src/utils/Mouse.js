@@ -19,7 +19,7 @@
 // WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE
 
-/*global SD, SDPoint, SDBrowser_isFF, SDDebug_error*/
+/*global Seadragon2, SD, SDPoint, SDBrowser_isFF, SDDebug_error*/
 
 /**
  * A utility class to deal with mouse input.

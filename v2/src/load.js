@@ -33,6 +33,8 @@
 // Types (default is standalone):
 // standalone - Has no external library dependencies.
 
+/*global ActiveXObject */
+
 (function () {
     
     var scripts = document.getElementsByTagName("script");
