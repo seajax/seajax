@@ -1,2 +1,5 @@
+# Python
 *.pyc
+
+# Built files
 /bin/
