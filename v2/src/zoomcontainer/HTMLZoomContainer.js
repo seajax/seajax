@@ -113,8 +113,10 @@ var SDHTMLZoomContainer = SD.HTMLZoomContainer = function (container) {
     this.dispose = function () {
         var cur;
         container.removeChild(subContainer);
+        /*jshint boss: true */
         while (cur = subContainer.firstChild) {
             container.appendChild(cur);
         }
+        /*jshint boss: false */
     };
 };

@@ -35,11 +35,13 @@ var
             prop,
             docElmtStyle = document.documentElement.style;
         
+        /*jshint boss: true */
         while (prop = PROPS.shift()) {
             if (typeof docElmtStyle[prop] !== "undefined") {
                 return prop;
             }
         }
+        /*jshint boss: false */
         
         return null;
     }()),
