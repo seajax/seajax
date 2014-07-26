@@ -85,7 +85,9 @@ function SDImageManager_checkForInit() {
             
             // kind of counterintuitive, but by calling new SDImage(), we actually
             // modify the existing HTML element.
+            /*jshint nonew: false */
             new SDImage(null, elements[i]);
+            /*jshint nonew: true */
         }
     }
     

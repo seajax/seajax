@@ -69,7 +69,9 @@ var
             for (i = 0; i < ieOpts.length; i++) {
                 ieOpt = ieOpts[i];
                 try {
+                    /*jshint nonew: false */
                     new ActiveXObject(ieOpt);
+                    /*jshint nonew: true */
                     XhrObject = ActiveXObject;
                     xhrArg = ieOpt;
                     break;
