@@ -1,0 +1,26 @@
+<html>
+<head>
+  <title>Seadragon: Zoomable Image</title>
+</head>
+<body>
+  <script src="../bin/v2/seadragon-zoomimage-standalone-raw.js"></script>
+  <script>
+    // Create multiscale image:
+    var image = new Seadragon2.Image();
+    image.src = new Seadragon2.DziTileSource(29566, 14321, 254, 1,
+      'http://seadragon.com/content/images/carinanebula_files/', 'jpg');
+    image.style.width = '1200px';
+    image.style.height = '581px';
+    document.body.appendChild(image);
+
+    // Make it zoomable:
+    var viewer = new Seadragon2.Viewer(image, {
+      viewportOptions: {
+          maxZoom: 25,
+          minZoom: 0.25,
+          visibilityRatio: 0.5
+      }
+    });
+  </script>
+</body>
+</html>

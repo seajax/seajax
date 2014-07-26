@@ -106,4 +106,12 @@ that can be called on the `Viewer` object once it’s constructed.
 
 Lint the code using `make lint`.
 
+# Examples
+
+Build files to view the following examples:
+
+-   [Zoomable Image][example-zoomable-image].
+
+
+[example-zoomable-image]: ./examples/zoomable-image.html
 [pivot-viewer-quickstart]: ./v2/app/pivot/quickstart.html
