@@ -8,6 +8,7 @@
     -   `make lint`: Lint files using [JSHint].
 -   Add `package.json` for distribution through [npm].
 -   Improve linting.
+-   Use standard `requestAnimationFrame` if available.
 
 
 [jshint]: http://www.jshint.com/

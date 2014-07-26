@@ -126,7 +126,9 @@ var SDTimer = SD.Timer = new function () {
 
     // Firefox offers an awesome way to sync with screen repaints, so we'll use
     // it if available. Now Chrome and IE10 have it too.
-    if (typeof mozRequestAnimationFrame === "function") {
+    if (typeof requestAnimationFrame === "function") {
+        reqAnimFrame = requestAnimationFrame;
+    } else if (typeof mozRequestAnimationFrame === "function") {
         reqAnimFrame = mozRequestAnimationFrame;
     } else if (typeof webkitRequestAnimationFrame === "function") {
         reqAnimFrame = webkitRequestAnimationFrame;
