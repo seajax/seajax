@@ -31,19 +31,27 @@ interaction.
 
 # Setup
 
-To build all outputs, run
-[`Build/Scripts/seajax_v2.py`](./Build/Scripts/seajax_v2.py) using Python 2
-or 3. The build script is currently set up to call `ajaxmin` for its
-minification step, but that could easily be swapped for another minifier if you
-prefer. After building, the `bin/v2` directory will contain various files
-containing different subsets of the Seajax functionality. The most complete
-feature set (and therefore the biggest JavaScript file) is the `pivot` file. The
-`zoom` file has just the features needed for creating a pan & zoom container;
-the `image` file has features for loading and displaying DZC and DZI content,
-and the `zoomimage` file contains both. `utils` and `ajax` are more minimal
-builds containing various helper functions. You should only ever need one of
-these JavaScript files (no need to include both `utils` and `pivot` on your
-page, because the `pivot` build contains everything from `utils`, for example).
+- 	**Windows:** To build all outputs, run
+	[`Build/Scripts/seajax_v2.py`](./Build/Scripts/seajax_v2.py) using Python 2
+	or 3.
+
+- 	**Mac OS X:** To build all outputs, run:
+
+	```bash
+	make
+	```
+
+The build script is currently set up to call `ajaxmin` for its minification
+step, but that could easily be swapped for another minifier if you prefer.
+After building, the `bin/v2` directory will contain various files containing
+different subsets of the Seajax functionality. The most complete feature set
+(and therefore the biggest JavaScript file) is the `pivot` file. The `zoom` file
+has just the features needed for creating a pan & zoom container; the `image`
+file has features for loading and displaying DZC and DZI content, and the
+`zoomimage` file contains both. `utils` and `ajax` are more minimal builds
+containing various helper functions. You should only ever need one of these
+JavaScript files (no need to include both `utils` and `pivot` on your page,
+because the `pivot` build contains everything from `utils`, for example).
 No external libraries are needed.
 
 
