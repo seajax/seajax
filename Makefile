@@ -1,4 +1,7 @@
 build:
 	@python Build/Scripts/seajax_v2.py
 
-.PHONY: build
+lint:
+	@./node_modules/.bin/jshint v2/src/
+
+.PHONY: build lint

@@ -100,4 +100,10 @@ that can be called on the `Viewer` object once it’s constructed.
 
 
 
+# Development
+
+## Lint
+
+Lint the code using `make lint`.
+
 [pivot-viewer-quickstart]: ./v2/app/pivot/quickstart.html
