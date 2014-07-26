@@ -86,12 +86,14 @@ def build_specific(target, type):
     writefile(PATH_OUTPUT_FILE % (target, type, ""), concatenated)
     # output min version of this concatenation
     # TODO add header
-    # Use ajaxmin if it's installed (you can replace this call with the minifier of your choice)
     try:
-        call(["ajaxmin", PATH_OUTPUT_FILE % (target, type, ""), "-out", PATH_OUTPUT_FILE % (target, type, "-min")])
+        call([
+            "../../node_modules/.bin/uglifyjs",
+            PATH_OUTPUT_FILE % (target, type, ""),
+            "--output", PATH_OUTPUT_FILE % (target, type, "-min")
+        ])
     except OSError:
-        print("Error in trying to call ajaxmin. Make sure it is installed and on the path. Outputting unminified...")
-        writefile(PATH_OUTPUT_FILE % (target, type, "-min"), concatenated)
+        print("Error: Could not find UglifyJS. Install it using `npm install` (see README.md).")
 
 def build(changenum):
     # TODO validate each source file against jslint, just once
