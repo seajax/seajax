@@ -10,6 +10,7 @@
 -   Improve linting.
 -   Use standard `requestAnimationFrame` if available.
 -   Add example for a [zoomable image][example-zoomable-image].
+-   Drop `-raw` suffix for unminified files.
 
 
 [example-zoomable-image]: ./examples/zoomable-image.html
