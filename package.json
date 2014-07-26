@@ -12,6 +12,9 @@
       "email": "aseem.kishore@gmail.com"
     }
   ],
+  "devDependencies": {
+    "jshint": "^2.5.2"
+  },
   "repository": {
     "type": "git",
     "url": "git@github.com:seajax/seajax.git"
