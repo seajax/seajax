@@ -31,7 +31,9 @@ SDEvent_add, SDEvent_remove, SDDebug_warn, window, SD*/
  * @namespace Seadragon2
  * @static
  */
+/*jshint supernew: true */
 var SDTimer = SD.Timer = new function () {
+/*jshint supernew: false */
     var that = this,
         first = null,
         delay = 16,
