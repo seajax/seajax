@@ -90,6 +90,7 @@ def build_specific(target, type):
         call([
             "../../node_modules/.bin/uglifyjs",
             PATH_OUTPUT_FILE % (target, type, ""),
+            "--mangle",
             "--output", PATH_OUTPUT_FILE % (target, type, "-min")
         ])
     except OSError:
