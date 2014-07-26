@@ -84,6 +84,7 @@ SDDzcTileSourcePrototype.base = SDTileSource;
 SDDzcTileSourcePrototype.isDzc = true;
 
 SDDzcTileSourcePrototype.getTileInfo = function (level) {
+    /*jshint bitwise: false */
     var itemSize = 1 << level,
         numItems = this.dzcTileSize / (1 << level),
         scale = this.getLevelScale(level),
@@ -91,6 +92,7 @@ SDDzcTileSourcePrototype.getTileInfo = function (level) {
         itemRow = this.dzcItemCoords.x,     // DZC mortons are reversed
         tileCol = Math.floor(itemCol / numItems),
         tileRow = Math.floor(itemRow / numItems);
+    /*jshint bitwise: true */
     
     return new SDTileInfo(
         // tile url:
