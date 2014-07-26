@@ -3,3 +3,6 @@
 
 # Built files
 /bin/
+
+# npm
+/node_modules/
