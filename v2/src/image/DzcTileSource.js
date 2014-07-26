@@ -138,6 +138,7 @@ SDDzcTileSourcePrototype.getTilesAbove = function (level, col, row, upperLevel) 
 // function calls on this DZC source to its associated DZI source,
 // if one exists. Conveniently, all TileSource functions start with
 // a level argument, so we'll intercept them all with the same logic.
+/*jshint -W089 */
 (function () {
     var key;
     for (key in SDDzcTileSourcePrototype) {
@@ -163,6 +164,7 @@ SDDzcTileSourcePrototype.getTilesAbove = function (level, col, row, upperLevel) 
         }());
     }
 }());
+/*jshint +W089 */
 
 // Functions to request DZC->DZI expansion, or undo it if the
 // image zooms back out
