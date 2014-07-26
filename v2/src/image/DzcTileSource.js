@@ -144,6 +144,7 @@ SDDzcTileSourcePrototype.getTilesAbove = function (level, col, row, upperLevel) 
     for (key in SDDzcTileSourcePrototype) {
         // we need to bind by value inside new the function we're building,
         // so we declare a new scope here.
+        /*jshint loopfunc: true */
         (function () {
             var name = key,
                 func = SDDzcTileSourcePrototype[name];
@@ -162,6 +163,7 @@ SDDzcTileSourcePrototype.getTilesAbove = function (level, col, row, upperLevel) 
                 };
             }
         }());
+        /*jshint loopfunc: false */
     }
 }());
 /*jshint +W089 */
