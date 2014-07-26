@@ -10,6 +10,11 @@
     {
       "name": "Aseem Kishore",
       "email": "aseem.kishore@gmail.com"
+    },
+    {
+      "name": "Daniel Gasienica",
+      "email": "daniel@gasienica.ch",
+      "url": "http://wwwgasi.ch/"
     }
   ],
   "devDependencies": {
