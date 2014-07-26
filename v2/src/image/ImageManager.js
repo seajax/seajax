@@ -136,7 +136,7 @@ SDImageManager.disableMarkupChecking = function () {
  */
 SDImageManager.enable = function () {
     SDImageManager_isEnabled = true;
-}
+};
 
 /**
  * Disable the ImageManager. It is enabled by default. This might help
@@ -145,4 +145,4 @@ SDImageManager.enable = function () {
  */
 SDImageManager.disable = function () {
     SDImageManager_isEnabled = false;
-}
+};

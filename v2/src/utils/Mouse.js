@@ -56,7 +56,7 @@ var SDMouse_getPosition = SDMouse.getPosition = function (event) {
     }
 
     return result;
-}
+};
 
 /**
  * Get the scroll direction of a mouse wheel event.
@@ -78,4 +78,4 @@ var SDMouse_getScroll = SDMouse.getScroll = function (event) {
     
     // normalize value to [-1, 1]
     return delta ? delta / Math.abs(delta) : 0;
-}
+};
