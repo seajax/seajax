@@ -20,6 +20,7 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE
 
 /*global SD, SDDebug_warn, window*/
+/*jshint strict: false */
 
 /**
  * <p>A simple class with some methods for listening for and triggering events.

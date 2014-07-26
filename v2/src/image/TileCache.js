@@ -22,6 +22,7 @@
 // This cache is just LRU, doesn't use higher priority for lower-res tiles.
 /*jslint onevar: true, undef: true, nomen: true, eqeqeq: true, bitwise: true,
 regexp: true, newcap: true, immed: true */
+/*jshint strict: false */
 
 function SDTileCache(capacity) {
     this.capacity = (capacity > 1) ? capacity : 2;

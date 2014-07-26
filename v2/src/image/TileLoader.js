@@ -23,6 +23,7 @@
 // defines the Seadragon2.TileLoader class
 /*global SDNetwork_numSpotsAvailable, SDNetwork_tryMakeImageRequest, SDDebug_error, SDTileCache, SDDebug_warn,
  SDMath_min*/
+/*jshint strict: false */
 
 var
     // This "class" is just a collection of static methods. The only "public" methods

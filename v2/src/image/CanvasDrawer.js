@@ -22,6 +22,7 @@
 // CanvasDrawer.js
 // defines the CanvasDrawer implementation of Drawer.
 /*global SDDrawer, SDDebug_warn, SDRect, SDMath_round, SDPoint, SDElement_setOpacity, SDDebug_error*/
+/*jshint strict: false */
 
 var
     /**

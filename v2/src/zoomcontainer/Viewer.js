@@ -22,6 +22,7 @@
 /*global SD, SDPoint, SDObject_extend, SDViewport, SDMouseTracker, SVGSVGElement, window,
 SDSVGZoomContainer, HTMLCanvasElement, SDCanvasZoomContainer, SDHTMLZoomContainer,
 SDElement_getStyle, SDTimer, SDEventManager, SDMath_max*/
+/*jshint strict: false */
 
 /**
  * <p>A basic Viewer. It will set up a MouseTracker on the specified container object,

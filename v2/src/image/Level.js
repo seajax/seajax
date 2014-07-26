@@ -20,6 +20,7 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE
 
 /*global SDRect_nullRect*/
+/*jshint strict: false */
 
 function Level(level, source) {
     // impossible starting level bounds.

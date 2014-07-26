@@ -20,6 +20,7 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE
 
 /*global SD, SDPoint, SDElement_transform*/
+/*jshint strict: false */
 
 /**
  * A ZoomContainer for HTML content. It provides zooming capabilities for HTML markup.

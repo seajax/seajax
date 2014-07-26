@@ -20,6 +20,7 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE
 
 /*global SDPoint, window, pageXOffset, pageYOffset*/
+/*jshint strict: false */
 
 /**
  * A utility class for working with HTML pages.

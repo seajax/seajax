@@ -20,6 +20,7 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE
 
 /*global SD, SDDebug_warn, addEventListener, SDMouse_getPosition, SDElement_getPosition, SDEvent_add, window, SDEvent_remove, SDEvent_cancel, SDEvent_stop, SDMouse_getScroll, SDEventManager*/
+/*jshint strict: false */
 
 (function () {
 

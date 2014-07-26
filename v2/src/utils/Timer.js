@@ -23,6 +23,7 @@
   plusplus: true, bitwise: true, regexp: true, immed: true */
 /*global mozRequestAnimationFrame, webkitRequestAnimationFrame, msRequestAnimationFrame,
 SDEvent_add, SDEvent_remove, SDDebug_warn, window, SD*/
+/*jshint strict: false */
 
 /**
  * A static timer that manages absolutely everything that needs to update per frame.

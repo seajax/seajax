@@ -20,6 +20,7 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE
 
 /*global Seadragon2, SD, SDPoint, SDBrowser_isFF, SDDebug_error*/
+/*jshint strict: false */
 
 /**
  * A utility class to deal with mouse input.

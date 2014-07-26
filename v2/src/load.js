@@ -34,6 +34,7 @@
 // standalone - Has no external library dependencies.
 
 /*global ActiveXObject */
+/*jshint strict: false */
 
 (function () {
     

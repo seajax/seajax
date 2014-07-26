@@ -20,6 +20,7 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE
 
 /*global SD, SDPoint*/
+/*jshint strict: false */
 
 /**
  * A ZoomContainer for 2D canvas content.

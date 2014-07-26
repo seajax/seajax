@@ -20,6 +20,7 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE
 
 /*global SD*/
+/*jshint strict: false */
 
 /**
  * A ZoomContainer for SVG content. It adjusts the top element's transform so that
