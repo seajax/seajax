@@ -71,7 +71,7 @@ var SDMouse_getScroll = SDMouse.getScroll = function (event) {
     if (typeof event.wheelDelta === "number") {
         delta = event.wheelDelta;
     } else if (typeof event.detail === "number") {
-        delta = event.detail * -1;
+        delta = -event.detail;
     } else {
         Seadragon2.Debug.fail("Unknown event mouse scroll, no known technique.");
     }
