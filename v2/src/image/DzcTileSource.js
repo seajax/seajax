@@ -23,7 +23,7 @@
 // Defines the Seadragon2.DzcTileSource class.
 
 /*global SD, SDRect, SDTileInfo, SDTileSource, SDMath_reverseMorton, SDDeepZoom_fetchTileSource*/
-/*jslint strict: false */
+/*jshint strict: false */
 
 /**
  * A TileSource representing a single item in a deep zoom collection.
@@ -84,6 +84,7 @@ SDDzcTileSourcePrototype.base = SDTileSource;
 SDDzcTileSourcePrototype.isDzc = true;
 
 SDDzcTileSourcePrototype.getTileInfo = function (level) {
+    /*jshint bitwise: false */
     var itemSize = 1 << level,
         numItems = this.dzcTileSize / (1 << level),
         scale = this.getLevelScale(level),
@@ -91,6 +92,7 @@ SDDzcTileSourcePrototype.getTileInfo = function (level) {
         itemRow = this.dzcItemCoords.x,     // DZC mortons are reversed
         tileCol = Math.floor(itemCol / numItems),
         tileRow = Math.floor(itemRow / numItems);
+    /*jshint bitwise: true */
     
     return new SDTileInfo(
         // tile url:
@@ -136,11 +138,13 @@ SDDzcTileSourcePrototype.getTilesAbove = function (level, col, row, upperLevel) 
 // function calls on this DZC source to its associated DZI source,
 // if one exists. Conveniently, all TileSource functions start with
 // a level argument, so we'll intercept them all with the same logic.
+/*jshint -W089 */
 (function () {
     var key;
     for (key in SDDzcTileSourcePrototype) {
         // we need to bind by value inside new the function we're building,
         // so we declare a new scope here.
+        /*jshint loopfunc: true */
         (function () {
             var name = key,
                 func = SDDzcTileSourcePrototype[name];
@@ -159,8 +163,10 @@ SDDzcTileSourcePrototype.getTilesAbove = function (level, col, row, upperLevel) 
                 };
             }
         }());
+        /*jshint loopfunc: false */
     }
 }());
+/*jshint +W089 */
 
 // Functions to request DZC->DZI expansion, or undo it if the
 // image zooms back out

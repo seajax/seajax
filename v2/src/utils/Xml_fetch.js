@@ -23,7 +23,7 @@
 // Defines the Seadragon2.Xml.fetch() method.
 
 /*global SD, SDXml, SDDebug_warn, SDDebug_error, SDFunction_EMPTY, ActiveXObject, XDomainRequest */
-/*jslint strict: false */
+/*jshint strict: false */
 
 var
 
@@ -69,7 +69,9 @@ var
             for (i = 0; i < ieOpts.length; i++) {
                 ieOpt = ieOpts[i];
                 try {
+                    /*jshint nonew: false */
                     new ActiveXObject(ieOpt);
+                    /*jshint nonew: true */
                     XhrObject = ActiveXObject;
                     xhrArg = ieOpt;
                     break;

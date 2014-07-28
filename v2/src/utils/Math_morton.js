@@ -23,7 +23,7 @@
 // Defines the Seadragon2.Math.morton() and reverseMorton() methods.
 
 /*global SDMath, SDPoint */
-/*jslint strict: false, plusplus: false, bitwise: false */
+/*jshint strict: false, plusplus: false, bitwise: false */
 
 var
 

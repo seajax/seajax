@@ -22,8 +22,8 @@
 // TileSource.js
 // Defines the Seadragon2.TileSource class.
 
-/*global SD, SDPoint, SDPoint_$, SDSize, SDRect, SDMath, SDMath_clamp, SDMath_log2, SDMath_round*/
-/*jslint strict: false, bitwise: false */
+/*global SD, SDPoint, SDPoint_$, SDSize, SDRect, SDMath, SDMath_ceil, SDMath_clamp, SDMath_floor, SDMath_log2, SDMath_max, SDMath_min, SDMath_round*/
+/*jshint strict: false, bitwise: false */
 
 /**
  *  An abstract class that describes tiled content. This class handles common

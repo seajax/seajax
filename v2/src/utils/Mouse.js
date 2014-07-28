@@ -19,7 +19,8 @@
 // WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE
 
-/*global SD, SDPoint, SDBrowser_isFF, SDDebug_error*/
+/*global Seadragon2, SD, SDPoint, SDBrowser_isFF, SDDebug_error*/
+/*jshint strict: false */
 
 /**
  * A utility class to deal with mouse input.
@@ -55,7 +56,7 @@ var SDMouse_getPosition = SDMouse.getPosition = function (event) {
     }
 
     return result;
-}
+};
 
 /**
  * Get the scroll direction of a mouse wheel event.
@@ -70,11 +71,11 @@ var SDMouse_getScroll = SDMouse.getScroll = function (event) {
     if (typeof event.wheelDelta === "number") {
         delta = event.wheelDelta;
     } else if (typeof event.detail === "number") {
-        delta = event.detail * -1;
+        delta = -event.detail;
     } else {
         Seadragon2.Debug.fail("Unknown event mouse scroll, no known technique.");
     }
     
     // normalize value to [-1, 1]
     return delta ? delta / Math.abs(delta) : 0;
-}
+};

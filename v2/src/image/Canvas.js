@@ -23,7 +23,7 @@
 // Defines the Seadragon2.Canvas class.
 
 /*global SD, SDSize, SDRect, SDObject_extend, SDDebug_warn */
-/*jslint strict: false */
+/*jshint strict: false, latedef: false */
 
 var
 
@@ -35,11 +35,13 @@ var
             prop,
             docElmtStyle = document.documentElement.style;
         
+        /*jshint boss: true */
         while (prop = PROPS.shift()) {
             if (typeof docElmtStyle[prop] !== "undefined") {
                 return prop;
             }
         }
+        /*jshint boss: false */
         
         return null;
     }()),

@@ -20,6 +20,7 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE
 
 /*global SD, SDPoint, SDElement_transform*/
+/*jshint strict: false */
 
 /**
  * A ZoomContainer for HTML content. It provides zooming capabilities for HTML markup.
@@ -112,8 +113,10 @@ var SDHTMLZoomContainer = SD.HTMLZoomContainer = function (container) {
     this.dispose = function () {
         var cur;
         container.removeChild(subContainer);
+        /*jshint boss: true */
         while (cur = subContainer.firstChild) {
             container.appendChild(cur);
         }
+        /*jshint boss: false */
     };
 };

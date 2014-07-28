@@ -23,6 +23,7 @@
 // defines the SDDrawer interface (package protected, not part of public API)
 
 /*global SDCanvasDrawer, SDImgDrawer*/
+/*jshint strict: false */
 
 var
     SDDrawer_CANVAS_API_AVAILABLE =

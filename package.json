@@ -1,0 +1,50 @@
+{
+  "name": "seadragon",
+  "version": "2.0.0-pre",
+  "description": "Seadragon Ajax (‘Seajax’) v2 is a JavaScript library for using deep zoom content (DZI and DZC files) in web pages, and for easily creating beautiful zooming interfaces.",
+  "author": "Microsoft Corporation",
+  "contributors": [
+    {
+      "name": "Seth O’Brien"
+    },
+    {
+      "name": "Aseem Kishore",
+      "email": "aseem.kishore@gmail.com"
+    },
+    {
+      "name": "Daniel Gasienica",
+      "email": "daniel@gasienica.ch",
+      "url": "http://wwwgasi.ch/"
+    }
+  ],
+  "devDependencies": {
+    "jshint": "^2.5.2",
+    "uglify-js": "^2.4.15"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:seajax/seajax.git"
+  },
+  "keywords": [
+    "seadragon",
+    "seajax",
+    "ajax",
+    "zoom",
+    "deep",
+    "zoom",
+    "zooming",
+    "dzi",
+    "dzc",
+    "multiscale",
+    "imaging",
+    "image"
+  ],
+  "license": {
+    "type": "BSD-2-Clause",
+    "url": "http://opensource.org/licenses/BSD-2-Clause"
+  },
+  "bugs": {
+    "url": "https://github.com/seajax/seajax/issues"
+  },
+  "homepage": "https://github.com/seajax/seajax"
+}

@@ -21,7 +21,8 @@
 
 // ImageManager.js
 // defines the Seadragon2.ImageManager class
-/*global SDDebug_log, SD, SDImage*/
+/*global SDDebug_log, SD, SDImage, SDTimer */
+/*jshint strict: false */
 
 var
 
@@ -84,7 +85,9 @@ function SDImageManager_checkForInit() {
             
             // kind of counterintuitive, but by calling new SDImage(), we actually
             // modify the existing HTML element.
+            /*jshint nonew: false */
             new SDImage(null, elements[i]);
+            /*jshint nonew: true */
         }
     }
     
@@ -135,7 +138,7 @@ SDImageManager.disableMarkupChecking = function () {
  */
 SDImageManager.enable = function () {
     SDImageManager_isEnabled = true;
-}
+};
 
 /**
  * Disable the ImageManager. It is enabled by default. This might help
@@ -144,4 +147,4 @@ SDImageManager.enable = function () {
  */
 SDImageManager.disable = function () {
     SDImageManager_isEnabled = false;
-}
+};

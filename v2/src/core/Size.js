@@ -23,7 +23,7 @@
 // Defines the Seadragon2.Size class.
 
 /*global SD, SDPoint */
-/*jslint strict: false */
+/*jshint strict: false */
 
 /**
  *  Represents a 2D size. This class encourages immutability -- all instance

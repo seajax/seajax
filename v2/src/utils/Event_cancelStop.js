@@ -23,7 +23,7 @@
 // Defines the Seadragon2.Event.cancel() and stop() methods.
 
 /*global SDEvent, SDEvent_$ */
-/*jslint strict: false */
+/*jshint strict: false */
 
 var
 

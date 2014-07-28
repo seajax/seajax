@@ -24,7 +24,7 @@
 
 /*global SD, window, innerWidth, innerHeight, SDMath_min, SDRect, SDBrowser_isIE8, document, SDSize,
  SDMath_max, getComputedStyle, SDDebug_error, SDPoint, SDPage_getScroll*/
-/*jslint strict: false */
+/*jshint strict: false */
 
 var
 

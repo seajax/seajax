@@ -22,8 +22,8 @@
 // Debug.js
 // Defines the Seadragon2.Debug class.
 
-/*global SD, SDString_format */
-/*jslint strict: false */
+/*global alert, console, SD, SDString_format */
+/*jshint strict: false */
 
 var
 

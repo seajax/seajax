@@ -23,7 +23,7 @@
 // Defines the Seadragon2.Event.add() and remove() methods.
 
 /*global SDEvent, SDDebug_error, SDFunction_EMPTY, event, attachEvent, detachEvent */
-/*jslint strict: false */
+/*jshint strict: false */
 
 // these comments are copied from Event.js, so that they YUI doc correctly.
 /**

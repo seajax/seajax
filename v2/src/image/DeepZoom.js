@@ -22,9 +22,8 @@
 // DeepZoom.js
 // Defines the Seadragon2.DeepZoom class.
 
-/*global SD, SDXml_parse, SDDisplayRect, SDRect, SDDziTileSource$, SDDzcTileSource$
- SDNetwork_tryMakeXmlHttpRequest, SDDebug_warn*/
-/*jslint strict: false */
+/*global SD, SDXml_parse, SDDisplayRect, SDRect, SDDziTileSource$, SDDzcTileSource$, SDNetwork_tryMakeXmlHttpRequest, SDDebug_warn*/
+/*jshint strict: false */
 
 var
     

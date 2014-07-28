@@ -23,7 +23,7 @@
 // Defines the Seadragon2.String class.
 
 /*global SD */
-/*jslint strict: false, plusplus: false */
+/*jshint strict: false, plusplus: false */
 
 var
 

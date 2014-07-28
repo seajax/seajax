@@ -20,6 +20,7 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE
 
 /*global SD, SDPoint, SDSpring, SDMath_log2, SDMath_clamp, SDRect, SDEventManager, SDTimer*/
+/*jshint strict: false */
 
 /**
  * The viewport handles resizing math, zooming about a given point, etc.

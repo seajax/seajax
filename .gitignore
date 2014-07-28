@@ -1,2 +1,14 @@
+# Mac OS X
+.DS_Store
+
+# Python
 *.pyc
+
+# Built files
 /bin/
+
+# npm
+/node_modules/
+
+# Sublime Text
+seadragon.sublime-workspace

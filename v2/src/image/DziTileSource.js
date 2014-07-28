@@ -23,7 +23,7 @@
 // Defines the Seadragon2.DziTileSource.js class.
 
 /*global SD, SDTileSource, SDTileSourcePrototype, SDPoint_origin*/
-/*jslint strict: false, plusplus: false */
+/*jshint strict: false, plusplus: false */
 
 /**
  *  A subclass of TileSource that describes Deep Zoom Images (DZIs). DZIs are

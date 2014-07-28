@@ -22,8 +22,8 @@
 // Seadragon2.js
 // Defines the Seadragon namespace.
 
-/*global Seadragon: true */
-/*jslint strict: false */
+/*global Seadragon2: true */
+/*jshint strict: false */
 
 /**
  *  The global Seadragon namespace. All Seadragon objects are defined within

@@ -23,7 +23,7 @@
 // Defines the Seadragon2.Spring constructor.
 
 /*global SD, SDMath_exp */
-/*jslint strict: false */
+/*jshint strict: false */
 
 /**
  * A class containing methods to calculate springy transforms.

@@ -23,7 +23,7 @@
 // Defines the Seadragon2.Rect class.
 
 /*global SD, SDPoint, SDSize */
-/*jslint strict: false */
+/*jshint strict: false */
 
 /**
  *  Represents a 2D rectangle. This class encourages immutability -- instance

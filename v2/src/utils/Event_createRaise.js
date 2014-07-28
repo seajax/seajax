@@ -22,8 +22,8 @@
 // Event.js
 // Defines the Seadragon2.Event class.
 
-/*global SDEvent, SDDebug_error, SDFunction_EMPTY */
-/*jslint strict: false */
+/*global SDEvent, SDDebug_error, SDDebug_warn, SDFunction_EMPTY */
+/*jshint strict: false */
 
 var
 
@@ -49,7 +49,7 @@ var
                 var event = document.createEvent("HTMLEvents");
                 event.initEvent(eventName, bubbles, true); // bubbles, cancelable
                 return elmt.dispatchEvent(event);
-            }
+            };
         }
         
         // case 2: IE method
@@ -65,7 +65,7 @@ var
                     // onreset onselect onselectionchange onstart onstop onsubmit onunload
                     SDDebug_warn("Event not fired: " + eventName + ". " + e.message);
                 }
-            }
+            };
         }
         
         // case 3: nothing to do, return empty function

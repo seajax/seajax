@@ -22,6 +22,7 @@
 /*global SDRect, SDTimer, window, SDPoint, SDMath_clamp, SDMath_ceil, SDMath_log2, SDMath_max,
  SDRect_nullRect, SDFunction_EMPTY, Level, SDDebug_error, Tile, SDTileLoader_nominate,
  SDTileLoader_getImgInfo, SDDrawer_nullDrawer, SDPoint_origin*/
+ /*jshint strict: false */
 
 var
     /**

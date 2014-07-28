@@ -52,7 +52,7 @@ PATH_OUTPUT_DIR = "../../bin/v2/"
 
 # relative to this build script. args are target (e.g. image, map, full),
 # type (e.g. standalone) and debug type (e.g. raw, min).
-PATH_OUTPUT_FILE = PATH_OUTPUT_DIR + "seadragon-%s-%s-%s.js"
+PATH_OUTPUT_FILE = PATH_OUTPUT_DIR + "seadragon-%s-%s%s.js"
 
 TARGETS = {
     "image"     :   [ "standalone" ],
@@ -83,15 +83,18 @@ def build_specific(target, type):
     # read all files and concatenate them together into one
     concatenated = readfiles(files)
     # output raw version of this concatenation
-    writefile(PATH_OUTPUT_FILE % (target, type, "raw"), concatenated)
+    writefile(PATH_OUTPUT_FILE % (target, type, ""), concatenated)
     # output min version of this concatenation
     # TODO add header
-    # Use ajaxmin if it's installed (you can replace this call with the minifier of your choice)
     try:
-        call(["ajaxmin", PATH_OUTPUT_FILE % (target, type, "raw"), "-out", PATH_OUTPUT_FILE % (target, type, "min")])
+        call([
+            "../../node_modules/.bin/uglifyjs",
+            PATH_OUTPUT_FILE % (target, type, ""),
+            "--mangle",
+            "--output", PATH_OUTPUT_FILE % (target, type, "-min")
+        ])
     except OSError:
-        print("Error in trying to call ajaxmin. Make sure it is installed and on the path. Outputting unminified...")
-        writefile(PATH_OUTPUT_FILE % (target, type, "min"), concatenated)
+        print("Error: Could not find UglifyJS. Install it using `npm install` (see README.md).")
 
 def build(changenum):
     # TODO validate each source file against jslint, just once

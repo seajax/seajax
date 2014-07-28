@@ -23,7 +23,7 @@
 // Defines the Seadragon2.Math.mod() method.
 
 /*global SDMath */
-/*jslint strict: false */
+/*jshint strict: false */
 
 var
 

@@ -23,7 +23,7 @@
 // Defines the Seadragon2.Browser class.
 
 /*global SD */
-/*jslint strict: false, regexp: false */
+/*jshint strict: false, regexp: false */
 
 /**
  *  

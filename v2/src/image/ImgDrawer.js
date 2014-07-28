@@ -22,6 +22,7 @@
 // ImgDrawer.js
 // Defines the ImgDrawer class, which extends Drawer
 /*global SDDrawer, SDDebug_error, SDElement_setOpacity*/
+/*jshint strict: false */
 
 var
     // IE by default uses nearest-neighbor interpolation for stretched or
