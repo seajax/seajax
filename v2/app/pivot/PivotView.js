@@ -1103,7 +1103,7 @@ var Pivot_init = Pivot.init = function (div, useHash) {
                 }
                 comparatorNames.push("Sort: Quantity");
                 comparators.push(compareByQuantity);
-                comparatorNames.push("Sort: A–Z");
+                comparatorNames.push("Sort: A-Z");
                 comparators.push(compareAlphabetical);
             }
             clearButton = clearButtons[name] = clearButton.cloneNode(true);
