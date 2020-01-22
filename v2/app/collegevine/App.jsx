@@ -349,6 +349,9 @@ var Pivot_init = (Pivot.init = function(div, useHistory) {
   )
   gridButton.title = "Grid View"
 
+  // FIXME: Refine React POC:
+  const topBarContainer = makeElement("div", "pivot_sorttools", topBar)
+
   // functions for making one view button look clickable and the other not
   function makeViewClickable(button) {
     button.className =
@@ -1314,6 +1317,12 @@ var Pivot_init = (Pivot.init = function(div, useHistory) {
       applyStateFromURL()
     })
   }
+
+  // FIXME: Refine React POC:
+  const GridButton = props => {
+    return <button>{props.label}</button>
+  }
+  ReactDOM.render(<GridButton label="Hello World" />, topBarContainer)
 
   return viewer
 })
