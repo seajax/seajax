@@ -1,5 +1,5 @@
 # Copyright (c) Microsoft Corporation
-# All rights reserved. 
+# All rights reserved.
 # BSD License
 #
 # Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -55,18 +55,19 @@ PATH_OUTPUT_DIR = "../../bin/v2/"
 PATH_OUTPUT_FILE = PATH_OUTPUT_DIR + "seadragon-%s-%s%s.js"
 
 TARGETS = {
-    "image"     :   [ "standalone" ],
-    "zoom"      :   [ "standalone" ],
-    "zoomimage" :   [ "standalone" ],
-    "pivot"     :   [ "standalone" ],
-    "ajax"      :   [ "standalone" ],
-    "utils"     :   [ "standalone" ]
+    "image": ["standalone"],
+    "zoom": ["standalone"],
+    "zoomimage": ["standalone"],
+    "pivot": ["standalone"],
+    "ajax": ["standalone"],
+    "utils": ["standalone"],
 }
 
 from os import chdir, getcwd
 from sys import argv, path
-from file_helpers import *      # under %SDROOT%/Build/Scripts/
+from file_helpers import *  # under %SDROOT%/Build/Scripts/
 from subprocess import call
+
 
 def build_specific(target, type):
     # this list will contain the names of the files to concatenate.
@@ -75,7 +76,7 @@ def build_specific(target, type):
     files.append(PATH_PRE_FILE % type)
     # in the middle are all of the src files for this target and type, which
     # are read from the appropriate file list.
-    files.extend(readfile(PATH_FILE_LIST % (target, type)).split('\n'))
+    files.extend(readfile(PATH_FILE_LIST % (target, type)).split("\n"))
     # at the end is the _post wrapper for this type.
     files.append(PATH_POST_FILE % type)
     # prepend the correct path to all of the file names.
@@ -87,14 +88,20 @@ def build_specific(target, type):
     # output min version of this concatenation
     # TODO add header
     try:
-        call([
-            "../../node_modules/.bin/uglifyjs",
-            PATH_OUTPUT_FILE % (target, type, ""),
-            "--mangle",
-            "--output", PATH_OUTPUT_FILE % (target, type, "-min")
-        ])
+        call(
+            [
+                "../../node_modules/.bin/uglifyjs",
+                PATH_OUTPUT_FILE % (target, type, ""),
+                "--mangle",
+                "--output",
+                PATH_OUTPUT_FILE % (target, type, "-min"),
+            ]
+        )
     except OSError:
-        print("Error: Could not find UglifyJS. Install it using `npm install` (see README.md).")
+        print(
+            "Error: Could not find UglifyJS. Install it using `npm install` (see README.md)."
+        )
+
 
 def build(changenum):
     # TODO validate each source file against jslint, just once
@@ -105,19 +112,20 @@ def build(changenum):
         for type in TARGETS[target]:
             build_specific(target, type)
 
+
 # IMMEDIATE EXECUTION
 
 if __name__ == "__main__":
-    
+
     # parse command-line args
     changenum = argv[1] if len(argv) > 1 else "[manual]"
-    
+
     # change directories to this script's directory temporarily
     olddir = getcwd()
     chdir(path[0])
-    
+
     # run the main function
     build(changenum)
-    
+
     # and finally, restore old working directory
     chdir(olddir)
