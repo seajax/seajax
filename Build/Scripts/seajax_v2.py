@@ -94,9 +94,11 @@ def build_specific(target, type):
             "npx",
             "babel",
             PATH_COMPILED_FILES,
-            "--quiet",
             "--config-file",
             "../../.babelrc.json",
+            "--extensions",
+            ".jsx",
+            "--quiet",
             "--out-dir",
             PATH_COMPILED_FILES,
         ]
