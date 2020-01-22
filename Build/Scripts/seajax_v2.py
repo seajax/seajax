@@ -80,7 +80,7 @@ def build_specific(target, type):
     files.append(PATH_PRE_FILE % type)
     # in the middle are all of the src files for this target and type, which
     # are read from the appropriate file list.
-    files.extend(readfile(PATH_FILE_LIST % (target, type)).split("\n"))
+    files.extend(readfile(PATH_FILE_LIST % (target, type)).splitlines())
     # at the end is the _post wrapper for this type.
     files.append(PATH_POST_FILE % type)
 
