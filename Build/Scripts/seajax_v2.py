@@ -90,7 +90,8 @@ def build_specific(target, type):
     try:
         call(
             [
-                "../../node_modules/.bin/uglifyjs",
+                "npx",
+                "uglifyjs",
                 PATH_OUTPUT_FILE % (target, type, ""),
                 "--mangle",
                 "--output",
