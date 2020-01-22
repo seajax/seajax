@@ -165,7 +165,8 @@ var PivotCxmlLoader = Pivot.CxmlLoader = {
             }
             temp = secondLevel.getAttribute("ImgBase");
             if (temp) {
-                imgBase = url.slice(0, url.lastIndexOf("/") + 1) + temp.replace("\\", "/");
+                var isAbsoluteURL = temp.indexOf('://') > 0 || temp.indexOf('//') === 0
+                imgBase = isAbsoluteURL ? temp : url.slice(0, url.lastIndexOf("/") + 1) + temp.replace("\\", "/");
             }
             secondLevel = secondLevel.childNodes;
             n = secondLevel.length;
