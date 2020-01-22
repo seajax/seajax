@@ -60,9 +60,10 @@ TARGETS = {
     "image": ["standalone"],
     "zoom": ["standalone"],
     "zoomimage": ["standalone"],
-    "pivot": ["standalone"],
     "ajax": ["standalone"],
     "utils": ["standalone"],
+    "pivot": ["standalone"],
+    "collegevine": ["standalone"],
 }
 
 from os import chdir, getcwd
