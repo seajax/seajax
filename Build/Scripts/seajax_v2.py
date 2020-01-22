@@ -24,11 +24,11 @@
 #
 # Can be called directly from the command line, with no arguments or with one build-number argument, from any working directory.
 # python seajax_v2
-# python seajax_v2 13256
+# python seajax_v2 pivot
 #
 # Python usage: (current working directory must be this script's directory)
 # import seajax_v2
-# seajax_v2.build(changenum)
+# seajax_v2.build(target)
 #
 # Dependencies:
 # file_helpers.py
@@ -46,6 +46,8 @@ PATH_POST_FILE = "_post/%s.txt"
 
 # relative to this build script.
 PATH_SRC_FILES = PATH_SEAJAX_V2 + "src/"
+PATH_APP_FILES = PATH_SEAJAX_V2 + "app/"
+PATH_COMPILED_FILES = PATH_SEAJAX_V2 + "compiled/"
 
 # relative to this build script.
 PATH_OUTPUT_DIR = "../../bin/v2/"
@@ -68,6 +70,8 @@ from sys import argv, path
 from file_helpers import *  # under %SDROOT%/Build/Scripts/
 from subprocess import call
 
+import shutil
+
 
 def build_specific(target, type):
     # this list will contain the names of the files to concatenate.
@@ -79,8 +83,27 @@ def build_specific(target, type):
     files.extend(readfile(PATH_FILE_LIST % (target, type)).split("\n"))
     # at the end is the _post wrapper for this type.
     files.append(PATH_POST_FILE % type)
+
+    shutil.rmtree(PATH_COMPILED_FILES)
+    shutil.copytree(PATH_APP_FILES, PATH_COMPILED_FILES + "app")
+    shutil.copytree(PATH_SRC_FILES, PATH_COMPILED_FILES + "src")
+
+    call(
+        [
+            "npx",
+            "babel",
+            PATH_COMPILED_FILES,
+            "--quiet",
+            "--config-file",
+            "../../.babelrc.json",
+            "--out-dir",
+            PATH_COMPILED_FILES,
+        ]
+    )
+
     # prepend the correct path to all of the file names.
-    files = map(lambda filename: PATH_SRC_FILES + filename, files)
+    files = map(lambda filename: PATH_COMPILED_FILES + "src/" + filename, files)
+
     # read all files and concatenate them together into one
     concatenated = readfiles(files)
     # output raw version of this concatenation
@@ -104,12 +127,13 @@ def build_specific(target, type):
         )
 
 
-def build(changenum):
+def build(target):
     # TODO validate each source file against jslint, just once
     # make output directory
     maketree(PATH_OUTPUT_DIR)
     # build each target and type
-    for target in TARGETS:
+    targets = TARGETS if target == "all" else [target]
+    for target in targets:
         for type in TARGETS[target]:
             build_specific(target, type)
 
@@ -117,16 +141,15 @@ def build(changenum):
 # IMMEDIATE EXECUTION
 
 if __name__ == "__main__":
-
     # parse command-line args
-    changenum = argv[1] if len(argv) > 1 else "[manual]"
+    target = argv[1] if len(argv) > 1 else "all"
 
     # change directories to this script's directory temporarily
     olddir = getcwd()
     chdir(path[0])
 
     # run the main function
-    build(changenum)
+    build(target)
 
     # and finally, restore old working directory
     chdir(olddir)
