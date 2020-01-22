@@ -1,5 +1,5 @@
 # Copyright (c) Microsoft Corporation
-# All rights reserved. 
+# All rights reserved.
 # BSD License
 #
 # Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -24,11 +24,11 @@
 #
 # Can be called directly from the command line, with no arguments or with one build-number argument, from any working directory.
 # python seajax_v2
-# python seajax_v2 13256
+# python seajax_v2 pivot
 #
 # Python usage: (current working directory must be this script's directory)
 # import seajax_v2
-# seajax_v2.build(changenum)
+# seajax_v2.build(target)
 #
 # Dependencies:
 # file_helpers.py
@@ -46,6 +46,8 @@ PATH_POST_FILE = "_post/%s.txt"
 
 # relative to this build script.
 PATH_SRC_FILES = PATH_SEAJAX_V2 + "src/"
+PATH_APP_FILES = PATH_SEAJAX_V2 + "app/"
+PATH_COMPILED_FILES = PATH_SEAJAX_V2 + "compiled/"
 
 # relative to this build script.
 PATH_OUTPUT_DIR = "../../bin/v2/"
@@ -55,18 +57,21 @@ PATH_OUTPUT_DIR = "../../bin/v2/"
 PATH_OUTPUT_FILE = PATH_OUTPUT_DIR + "seadragon-%s-%s%s.js"
 
 TARGETS = {
-    "image"     :   [ "standalone" ],
-    "zoom"      :   [ "standalone" ],
-    "zoomimage" :   [ "standalone" ],
-    "pivot"     :   [ "standalone" ],
-    "ajax"      :   [ "standalone" ],
-    "utils"     :   [ "standalone" ]
+    "image": ["standalone"],
+    "zoom": ["standalone"],
+    "zoomimage": ["standalone"],
+    "pivot": ["standalone"],
+    "ajax": ["standalone"],
+    "utils": ["standalone"],
 }
 
 from os import chdir, getcwd
 from sys import argv, path
-from file_helpers import *      # under %SDROOT%/Build/Scripts/
+from file_helpers import *  # under %SDROOT%/Build/Scripts/
 from subprocess import call
+
+import shutil
+
 
 def build_specific(target, type):
     # this list will contain the names of the files to concatenate.
@@ -75,11 +80,30 @@ def build_specific(target, type):
     files.append(PATH_PRE_FILE % type)
     # in the middle are all of the src files for this target and type, which
     # are read from the appropriate file list.
-    files.extend(readfile(PATH_FILE_LIST % (target, type)).split('\n'))
+    files.extend(readfile(PATH_FILE_LIST % (target, type)).split("\n"))
     # at the end is the _post wrapper for this type.
     files.append(PATH_POST_FILE % type)
+
+    shutil.rmtree(PATH_COMPILED_FILES)
+    shutil.copytree(PATH_APP_FILES, PATH_COMPILED_FILES + "app")
+    shutil.copytree(PATH_SRC_FILES, PATH_COMPILED_FILES + "src")
+
+    call(
+        [
+            "npx",
+            "babel",
+            PATH_COMPILED_FILES,
+            "--quiet",
+            "--config-file",
+            "../../.babelrc.json",
+            "--out-dir",
+            PATH_COMPILED_FILES,
+        ]
+    )
+
     # prepend the correct path to all of the file names.
-    files = map(lambda filename: PATH_SRC_FILES + filename, files)
+    files = map(lambda filename: PATH_COMPILED_FILES + "src/" + filename, files)
+
     # read all files and concatenate them together into one
     concatenated = readfiles(files)
     # output raw version of this concatenation
@@ -87,37 +111,45 @@ def build_specific(target, type):
     # output min version of this concatenation
     # TODO add header
     try:
-        call([
-            "../../node_modules/.bin/uglifyjs",
-            PATH_OUTPUT_FILE % (target, type, ""),
-            "--mangle",
-            "--output", PATH_OUTPUT_FILE % (target, type, "-min")
-        ])
+        call(
+            [
+                "npx",
+                "uglifyjs",
+                PATH_OUTPUT_FILE % (target, type, ""),
+                "--mangle",
+                "--output",
+                PATH_OUTPUT_FILE % (target, type, "-min"),
+            ]
+        )
     except OSError:
-        print("Error: Could not find UglifyJS. Install it using `npm install` (see README.md).")
+        print(
+            "Error: Could not find UglifyJS. Install it using `npm install` (see README.md)."
+        )
 
-def build(changenum):
+
+def build(target):
     # TODO validate each source file against jslint, just once
     # make output directory
     maketree(PATH_OUTPUT_DIR)
     # build each target and type
-    for target in TARGETS:
+    targets = TARGETS if target == "all" else [target]
+    for target in targets:
         for type in TARGETS[target]:
             build_specific(target, type)
+
 
 # IMMEDIATE EXECUTION
 
 if __name__ == "__main__":
-    
     # parse command-line args
-    changenum = argv[1] if len(argv) > 1 else "[manual]"
-    
+    target = argv[1] if len(argv) > 1 else "all"
+
     # change directories to this script's directory temporarily
     olddir = getcwd()
     chdir(path[0])
-    
+
     # run the main function
-    build(changenum)
-    
+    build(target)
+
     # and finally, restore old working directory
     chdir(olddir)

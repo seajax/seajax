@@ -46,7 +46,7 @@ var Pivot_init = Pivot.init = function (div, useHistory) {
 
     // check whether the browser supports canvas
     if (!makeElement("canvas").getContext) {
-        addText(div, "Your browser doesn't support canvas! Get a better one.");
+        addText(div, "Your browser doesn’t support canvas! Get a more modern one.");
         return;
     }
 

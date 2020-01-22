@@ -1,5 +1,5 @@
 // Copyright (c) Microsoft Corporation
-// All rights reserved. 
+// All rights reserved.
 // BSD License
 //
 // Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -100,9 +100,10 @@ var templateRegex = /<\?(?:\??[^>]+)*\?>/g,
                     // For instance, the reduce function on an array could be used to display all facet values
                     // in a variety of ways.
                     (function () {
-                        with (item) {
-                            evalResult = eval(matchString);
-                        }
+                        // // FIXME: Disabled due to incompatibility with Babel / strict mode:
+                        // with (item) {
+                        //     evalResult = eval(matchString);
+                        // }
                     }());
 
                     // transform the result to a string, if it isn't already
