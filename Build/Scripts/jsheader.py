@@ -1,5 +1,5 @@
 # Copyright (c) Microsoft Corporation
-# All rights reserved. 
+# All rights reserved.
 # BSD License
 #
 # Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -27,31 +27,34 @@ _TOKEN_MID = " * "
 _TOKEN_END = " */\n"
 _TOKEN_END_LEN = len(_TOKEN_END)
 
+
 def _comment(text):
-    '''
-    Returns the given text as a multi-lined Javascript block comment.
-    '''
+    """
+    Returns the given text as a multi-lined JavaScript block comment.
+    """
     if text is None or text == "":
         return ""
     output = [_TOKEN_BEGIN]
-    lines = text.strip().split('\n')
+    lines = text.strip().split("\n")
     for line in lines:
         output.append(_TOKEN_MID + line)
     output.append(_TOKEN_END)
-    return '\n'.join(output)
+    return "\n".join(output)
+
 
 def getHeader(js):
-    '''
+    """
     Returns the header comment at the top of this JS code, if there is one.
     Otherwise, returns the empty string.
-    '''
+    """
     if not js.startswith(_TOKEN_BEGIN):
         return ""
-    return js[ : js.find(_TOKEN_END) + _TOKEN_END_LEN ]
+    return js[: js.find(_TOKEN_END) + _TOKEN_END_LEN]
+
 
 def setHeader(js, header):
-    '''
+    """
     Prepends the given text as a comment header to the top of the given JS code,
     removing any previous header comment if there is one.
-    '''
+    """
     return js.replace(getHeader(js), _comment(header), 1)

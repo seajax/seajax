@@ -60,9 +60,10 @@ TARGETS = {
     "image": ["standalone"],
     "zoom": ["standalone"],
     "zoomimage": ["standalone"],
-    "pivot": ["standalone"],
     "ajax": ["standalone"],
     "utils": ["standalone"],
+    "pivot": ["standalone"],
+    "collegevine": ["standalone"],
 }
 
 from os import chdir, getcwd
@@ -80,7 +81,7 @@ def build_specific(target, type):
     files.append(PATH_PRE_FILE % type)
     # in the middle are all of the src files for this target and type, which
     # are read from the appropriate file list.
-    files.extend(readfile(PATH_FILE_LIST % (target, type)).split("\n"))
+    files.extend(readfile(PATH_FILE_LIST % (target, type)).splitlines())
     # at the end is the _post wrapper for this type.
     files.append(PATH_POST_FILE % type)
 
@@ -93,9 +94,11 @@ def build_specific(target, type):
             "npx",
             "babel",
             PATH_COMPILED_FILES,
-            "--quiet",
             "--config-file",
             "../../.babelrc.json",
+            "--extensions",
+            ".jsx",
+            "--quiet",
             "--out-dir",
             PATH_COMPILED_FILES,
         ]
