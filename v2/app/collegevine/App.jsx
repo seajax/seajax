@@ -1297,8 +1297,8 @@ var Pivot_init = (Pivot.init = function(
     setView(currentView)
     if (useHistory) {
       hasStateBeenAppliedFromURL = true
-      history.replaceState(null, "", getPathWithState())
       applyStateFromURL()
+      history.replaceState(null, "", getPathWithState())
     }
   })
 
