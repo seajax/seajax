@@ -1078,8 +1078,8 @@ var Pivot_init = (Pivot.init = function(div, useHistory) {
     const isGridViewActive =
       gridButton.className.indexOf("pivot_activesort") !== -1
     return JSON.stringify({
-      filters: filtersCopy,
-      search: activeSearch,
+      filters: Object.keys(filtersCopy).length > 0 ? filtersCopy : undefined,
+      search: activeSearch || undefined,
       sortBy: sortBox.value,
       view: isGridViewActive ? "grid" : "graph",
     })
