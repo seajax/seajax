@@ -17,7 +17,12 @@ PivotNumber_format, makeElement, addText, hasOwnProperty, PivotDatePicker, Pivot
  * @param useHistory {bool} Whether to update the URL to represent current filter state
  * @return {Pivot.PivotViewer}
  */
-var Pivot_init = (Pivot.init = function(div, useHistory) {
+var Pivot_init = (Pivot.init = function(
+  div,
+  { useHistory = false, initialView = "grid" } = {}
+) {
+  let currentView = initialView || "grid"
+
   // clear out the workspace we've been provided
   while (div.firstChild) {
     div.removeChild(div.firstChild)
@@ -338,7 +343,7 @@ var Pivot_init = (Pivot.init = function(div, useHistory) {
   zoomSlider = new PivotSlider(zoomSlider, 0, 100, 0, "Zoom Out", "Zoom In")
   var graphButton = makeElement(
     "div",
-    "pivot_sorttools pivot_graph pivot_hoverable",
+    "pivot_sorttools pivot_graph pivot_activesort",
     topBar
   )
   graphButton.title = "Graph View"
@@ -349,31 +354,41 @@ var Pivot_init = (Pivot.init = function(div, useHistory) {
   )
   gridButton.title = "Grid View"
 
-  // FIXME: Refine React POC:
-  const topBarContainer = makeElement("div", "pivot_sorttools", topBar)
-
   // functions for making one view button look clickable and the other not
   function makeViewClickable(button) {
-    button.className =
-      button.className.replace(" pivot_activesort", "") + " pivot_hoverable"
+    button.classList.remove("pivot_activesort")
+    button.classList.add("pivot_hoverable")
   }
   function makeViewSelected(button) {
-    button.className =
-      button.className.replace(" pivot_hoverable", "") + " pivot_activesort"
+    button.classList.add("pivot_activesort")
+    button.classList.remove("pivot_hoverable")
   }
 
-  graphButton.onclick = function() {
-    if (viewer.graphView()) {
-      makeViewSelected(graphButton)
-      makeViewClickable(gridButton)
+  function setView(value) {
+    switch (value) {
+      case "grid": {
+        viewer.gridView()
+        makeViewSelected(gridButton)
+        makeViewClickable(graphButton)
+        break
+      }
+      case "graph": {
+        viewer.graphView()
+        makeViewSelected(graphButton)
+        makeViewClickable(gridButton)
+        break
+      }
+      default:
+        Seadragon2.Debug.warn(`setView: Invalid view: ${value}`)
+        return
     }
+
+    currentView = value
   }
-  gridButton.onclick = function() {
-    if (viewer.gridView()) {
-      makeViewSelected(gridButton)
-      makeViewClickable(graphButton)
-    }
-  }
+
+  graphButton.onclick = () => setView("graph")
+  gridButton.onclick = () => setView("grid")
+
   var sortBox = makeElement("select", "pivot pivot_sorttools", topBar)
 
   // re-sort the collection when the sort box changes
@@ -899,10 +914,7 @@ var Pivot_init = (Pivot.init = function(div, useHistory) {
       filterValues.length === 1
     ) {
       // numbers and dates re-bucketize and look awesome, but strings don't
-      if (viewer.gridView()) {
-        makeViewSelected(gridButton)
-        makeViewClickable(graphButton)
-      }
+      setView("grid")
     } else {
       viewer.filter()
     }
@@ -1078,13 +1090,11 @@ var Pivot_init = (Pivot.init = function(div, useHistory) {
         }
       }
     }
-    const isGridViewActive =
-      gridButton.className.indexOf("pivot_activesort") !== -1
     return JSON.stringify({
-      filters: filtersCopy,
-      search: activeSearch,
+      filters: Object.keys(filtersCopy).length > 0 ? filtersCopy : undefined,
+      search: activeSearch || undefined,
       sortBy: sortBox.value,
-      view: isGridViewActive ? "grid" : "graph",
+      view: currentView,
     })
   }
 
@@ -1132,11 +1142,8 @@ var Pivot_init = (Pivot.init = function(div, useHistory) {
       sortBox.value = sortBy
       viewer.sortBy(sortBy)
     }
-    if (filterData.view === "graph") {
-      graphButton.onclick()
-    }
-    if (filterData.view === "grid") {
-      gridButton.onclick()
+    if (typeof filterData.view === "string") {
+      setView(filterData.view)
     }
     refreshFilterPane()
   }
@@ -1154,7 +1161,7 @@ var Pivot_init = (Pivot.init = function(div, useHistory) {
   }
 
   function getPathWithState() {
-    return "?state=" + encodeURIComponent(serializeFilters())
+    return "?state=" + serializeFilters()
   }
 
   function applyStateFromURL() {
@@ -1166,7 +1173,7 @@ var Pivot_init = (Pivot.init = function(div, useHistory) {
     try {
       deserializeAndApplyFilters(state)
     } catch (error) {
-      Seadragon2.Debug.warn("Bad URL state")
+      Seadragon2.Debug.warn(`Bad URL state: ${error}`)
     }
   }
 
@@ -1287,10 +1294,11 @@ var Pivot_init = (Pivot.init = function(div, useHistory) {
     }
 
     // apply filters from URL
+    setView(currentView)
     if (useHistory) {
       hasStateBeenAppliedFromURL = true
-      history.replaceState(null, "", getPathWithState())
       applyStateFromURL()
+      history.replaceState(null, "", getPathWithState())
     }
   })
 
@@ -1317,12 +1325,6 @@ var Pivot_init = (Pivot.init = function(div, useHistory) {
       applyStateFromURL()
     })
   }
-
-  // FIXME: Refine React POC:
-  const GridButton = props => {
-    return <button>{props.label}</button>
-  }
-  ReactDOM.render(<GridButton label="Hello World" />, topBarContainer)
 
   return viewer
 })
