@@ -1161,7 +1161,7 @@ var Pivot_init = (Pivot.init = function(
   }
 
   function getPathWithState() {
-    return "?state=" + encodeURIComponent(serializeFilters())
+    return "?state=" + serializeFilters()
   }
 
   function applyStateFromURL() {
