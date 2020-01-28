@@ -1173,7 +1173,7 @@ var Pivot_init = (Pivot.init = function(
     try {
       deserializeAndApplyFilters(state)
     } catch (error) {
-      Seadragon2.Debug.warn("Bad URL state")
+      Seadragon2.Debug.warn(`Bad URL state: ${error}`)
     }
   }
 
