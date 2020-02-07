@@ -90,6 +90,10 @@ var PivotViewer = (Pivot.PivotViewer = function(
   var activeItemsArr = []
   var rearrangingItemsArr = []
 
+  // external
+  let _activeItems = {}
+  let _activeItemsArr = []
+
   var isGridView = true
 
   var now = new Date().getTime()
@@ -209,6 +213,11 @@ var PivotViewer = (Pivot.PivotViewer = function(
         activeItemsArr.push(item)
       }
     })
+  }
+
+  function setExternalActiveItems() {
+    activeItems = _activeItems
+    activeItemsArr = _activeItemsArr
   }
 
   // Helpers -- ARRANGEMENT
@@ -1135,7 +1144,7 @@ var PivotViewer = (Pivot.PivotViewer = function(
     prevActiveItems = Seadragon2.Object.clone(currentItems)
 
     // now that the viewport has zoomed to its default position, run the filters
-    runFilters()
+    setExternalActiveItems()
 
     // get rid of any grid bars we've drawn before
     backLayer.innerHTML = ""
@@ -2897,6 +2906,21 @@ var PivotViewer = (Pivot.PivotViewer = function(
     })
     // now check to see whether we can immediately add items
     onLoad()
+  }
+
+  this.setActiveItems = items => {
+    this.addItems(items)
+
+    // clear active items
+    _activeItems = {}
+    _activeItemsArr = []
+
+    items.forEach(item => {
+      _activeItems[item.id] = item
+      _activeItemsArr.push(item)
+    })
+
+    this.filter()
   }
 
   /**
