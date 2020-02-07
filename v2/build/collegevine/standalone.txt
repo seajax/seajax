@@ -57,6 +57,6 @@ zoomcontainer/Viewer.js
 ../app/pivot/Slider.js
 ../app/pivot/Template.js
 ../app/pivot/Lzw.js
-../app/pivot/CxmlLoader.js
 ../app/collegevine/AppViewer.js
+../app/collegevine/CollectionJSONLoader.js
 ../app/collegevine/App.js
