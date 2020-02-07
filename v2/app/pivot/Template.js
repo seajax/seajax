@@ -100,10 +100,9 @@ var templateRegex = /<\?(?:\??[^>]+)*\?>/g,
                     // For instance, the reduce function on an array could be used to display all facet values
                     // in a variety of ways.
                     (function () {
-                        // // FIXME: Disabled due to incompatibility with Babel / strict mode:
-                        // with (item) {
-                        //     evalResult = eval(matchString);
-                        // }
+                        with (item) {
+                            evalResult = eval(matchString);
+                        }
                     }());
 
                     // transform the result to a string, if it isn't already
