@@ -64,6 +64,7 @@ TARGETS = {
     "utils": ["standalone"],
     "pivot": ["standalone"],
     "collegevine": ["standalone"],
+    "collegevine-hub": ["standalone"],
 }
 
 from os import chdir, getcwd
