@@ -1330,3 +1330,30 @@ var Pivot_init = (Pivot.init = function(
 })
 
 Seadragon2.ImageManager.disable()
+
+// in order to support the HTML-only scenario, we check for any items
+// with class "pivot_ajax_viewer" and set them up automatically.
+// if a location to fetch CXML was also provided, we'll start getting it.
+// Chrome seems to trigger DOMContentLoaded before it's given layout to the viewer,
+// which is a problem because we'll get invalid values for the available layout space.
+// Instead, wait for the "load" event, which could be much later.
+addEventListener(
+  "load",
+  function() {
+    var i, n, div, url, viewer
+    var viewers = document.getElementsByClassName("pivot_ajax_viewer")
+    n = viewers.length
+    for (i = 0; i < n; i++) {
+      div = viewers[i]
+      url = div.getAttribute("data-collection")
+      var useHistory = div.getAttribute("data-use-history")
+      useHistory = useHistory && useHistory.toLowerCase() !== "false"
+      viewer = Pivot_init(div, useHistory)
+      div.pivotViewer = viewer
+      if (url) {
+        PivotCxmlLoader.load(viewer, url)
+      }
+    }
+  },
+  false
+)
