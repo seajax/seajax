@@ -255,22 +255,6 @@ var Pivot_init = (Pivot.init = function(div, { initialView = "grid" } = {}) {
                 "Unrecognized facet type in details pane: " + facetCategory.type
               )
           }
-          if (filter !== undefined && facetCategory.isFilterVisible) {
-            // the user should be able to click on this value to re-filter by it.
-            facetValDiv.className += " pivot_filterable"
-            // new variable scope so we can bind to variables
-            ;(function() {
-              var facet = facetName,
-                values = [filter],
-                type = facetCategory.type
-              facetValDiv.onclick = function() {
-                onClearAll(true)
-                resetFilter(facet, values, type)
-                // refreshFilterPane()
-                viewer.filter()
-              }
-            })()
-          }
         }
       }
       detailsPaneShowing = item
@@ -406,39 +390,6 @@ var Pivot_init = (Pivot.init = function(div, { initialView = "grid" } = {}) {
     link.href = legalInfo.href
     link.target = "_blank"
     addText(link, legalInfo.name)
-  })
-
-  // handle a click on the "clear all" button
-  function onClearAll(wait) {
-    viewer.clearFilters()
-    activeFilters = {}
-    if (wait !== true) {
-      viewer.filter()
-    }
-  }
-
-  // this event is only raised for filter changes that originate inside the viewer,
-  // such as clicking on a bar of the graph view. it is the way that the viewer can
-  // request a filter to be applied to itself. by using this model, we keep filter
-  // management together in one place (here), even though the viewer occasionally
-  // has to ask for filters. in response, we must create the requested filter and
-  // apply it.
-  viewer.addListener("filterrequest", function(newFilter) {
-    var facetType = newFilter.type,
-      filterValues = newFilter.values
-    // we have to update our representation of active filters
-    resetFilter(newFilter.facet, filterValues, facetType)
-    if (
-      (facetType === "String" ||
-        facetType === "Link" ||
-        facetType === "LongString") &&
-      filterValues.length === 1
-    ) {
-      // numbers and dates re-bucketize and look awesome, but strings don't
-      setView("grid")
-    } else {
-      viewer.filter()
-    }
   })
 
   // once we know about facets for the collection, we can build
