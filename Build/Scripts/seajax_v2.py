@@ -64,6 +64,7 @@ TARGETS = {
     "utils": ["standalone"],
     "pivot": ["standalone"],
     "collegevine": ["standalone"],
+    "collegevine-hub": ["standalone"],
 }
 
 from os import chdir, getcwd
@@ -113,21 +114,21 @@ def build_specific(target, type):
     writefile(PATH_OUTPUT_FILE % (target, type, ""), concatenated)
     # output min version of this concatenation
     # TODO add header
-    try:
-        call(
-            [
-                "npx",
-                "uglifyjs",
-                PATH_OUTPUT_FILE % (target, type, ""),
-                "--mangle",
-                "--output",
-                PATH_OUTPUT_FILE % (target, type, "-min"),
-            ]
-        )
-    except OSError:
-        print(
-            "Error: Could not find UglifyJS. Install it using `npm install` (see README.md)."
-        )
+    # try:
+    #     call(
+    #         [
+    #             "npx",
+    #             "uglifyjs",
+    #             PATH_OUTPUT_FILE % (target, type, ""),
+    #             "--mangle",
+    #             "--output",
+    #             PATH_OUTPUT_FILE % (target, type, "-min"),
+    #         ]
+    #     )
+    # except OSError:
+    #     print(
+    #         "Error: Could not find UglifyJS. Install it using `npm install` (see README.md)."
+    #     )
 
 
 def build(target):
