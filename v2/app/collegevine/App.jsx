@@ -268,7 +268,8 @@ var Pivot_init = (Pivot.init = function(
           }
           if (filter !== undefined && facetCategory.isFilterVisible) {
             // the user should be able to click on this value to re-filter by it.
-            facetValDiv.className += " pivot_filterable"
+            facetValDiv.classList.add("pivot_filterable")
+            facetValDiv.dataset.facet = facetName
             // new variable scope so we can bind to variables
             ;(function() {
               var facet = facetName,
@@ -1256,6 +1257,7 @@ var Pivot_init = (Pivot.init = function(
       facetHeading = makeElement("div", "pivot pivot_facetname", filterPane)
       facetHeading.onclick = onFacetClicked
       facetHeading.name = name
+      facetHeading.dataset.facet = name
       facetHeading.facetType = facet.type
       if (
         facet.type === "String" ||
