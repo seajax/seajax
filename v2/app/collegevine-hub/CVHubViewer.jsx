@@ -2921,7 +2921,7 @@ var PivotViewer = (Pivot.PivotViewer = function(
       _activeItemsArr.push(item)
     })
 
-    this.filter()
+    this.gridView()
   }
 
   this.setActiveGroups = groups => {
