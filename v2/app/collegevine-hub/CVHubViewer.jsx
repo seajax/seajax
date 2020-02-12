@@ -93,6 +93,7 @@ var PivotViewer = (Pivot.PivotViewer = function(
   // external
   let _activeItems = {}
   let _activeItemsArr = []
+  let _activeGroups = []
 
   var isGridView = true
 
@@ -1234,7 +1235,7 @@ var PivotViewer = (Pivot.PivotViewer = function(
       topLeftItemInfo = gridInfo.topLeft
       rightmostItemInfo = gridInfo.rightmost
     } else {
-      allSortedItems = bucketize[facet.type || "String"](sortFacet)
+      allSortedItems = _activeGroups
 
       var barWidth = containerRect.width / allSortedItems.length
       var innerBarWidth = barWidth * 0.86
@@ -2921,6 +2922,28 @@ var PivotViewer = (Pivot.PivotViewer = function(
     })
 
     this.filter()
+  }
+
+  this.setActiveGroups = groups => {
+    groups.forEach(group => {
+      const { items } = group
+      this.addItems(items)
+    })
+
+    // clear active items
+    _activeItems = {}
+    _activeItemsArr = []
+    _activeGroups = groups
+
+    groups.forEach(group => {
+      const { items } = group
+      items.forEach(item => {
+        _activeItems[item.id] = item
+        _activeItemsArr.push(item)
+      })
+    })
+
+    this.graphView()
   }
 
   /**
