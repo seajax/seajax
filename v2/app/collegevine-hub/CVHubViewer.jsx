@@ -2649,6 +2649,7 @@ var PivotViewer = (Pivot.PivotViewer = function(
     // clear active items
     _activeItems = {}
     _activeItemsArr = []
+    _activeGroups = []
 
     items.forEach(item => {
       _activeItems[item.id] = item
