@@ -93,6 +93,7 @@ var PivotViewer = (Pivot.PivotViewer = function(
   // external
   let _activeItems = {}
   let _activeItemsArr = []
+  let _activeGroups = []
 
   var isGridView = true
 
@@ -710,15 +711,6 @@ var PivotViewer = (Pivot.PivotViewer = function(
     }
   }
 
-  // round the given positive number down to the nearest number that can be represented
-  // as n * 10^m, where m is an integer and n is 1, 2.5, or 5.
-  function makeFriendlyNumber(a) {
-    var scale = Math.floor(Math.log(a) / Math.LN10),
-      b = a * Math.pow(10, -scale),
-      c = b < 2.5 ? 1 : b < 5 ? 2.5 : 5
-    return c * Math.pow(10, scale)
-  }
-
   var comparators = {
     Number: function(a, b) {
       return a - b
@@ -734,263 +726,6 @@ var PivotViewer = (Pivot.PivotViewer = function(
   }
   comparators.DateTime = comparators.Number
   comparators.LongString = comparators.String
-
-  // these functions set up the bar categories for graph view.
-  var bucketize = {
-    String: function(facetName) {
-      var item,
-        bucketMap = {},
-        id,
-        facetData,
-        bucket,
-        allSortedItems = [],
-        bucketName,
-        i
-
-      function putInBucket(bucketName) {
-        // we use the same bucketing code for links, so check for its short value
-        bucketName = bucketName.content || bucketName
-        bucket = bucketMap[bucketName]
-        if (!bucket) {
-          bucket = bucketMap[bucketName] = {}
-        }
-        bucket[id] = item
-      }
-
-      for (i = activeItemsArr.length - 1; i >= 0; i--) {
-        // any facet can have multiple values, and we sort the item into
-        // all applicable buckets. if it doesn't have any values, put it
-        // into the "(no info)" bucket.
-        item = activeItemsArr[i]
-        id = item.id
-        facetData = item.facets[facetName]
-        if (facetData) {
-          facetData.forEach(putInBucket)
-        } else {
-          putInBucket("(no info)")
-        }
-      }
-
-      for (bucketName in bucketMap) {
-        if (hasOwnProperty.call(bucketMap, bucketName)) {
-          allSortedItems.push({
-            label: bucketName,
-            items: bucketMap[bucketName],
-            values: [bucketName],
-          })
-        }
-      }
-
-      var comparator =
-        facets[facetName].comparator ||
-        function(a, b) {
-          return a > b ? 1 : a === b ? 0 : -1
-        }
-
-      // sort the buckets. by default, this is alphabetical, but the facet category
-      // could define a more sensible sorting order for its contents.
-      allSortedItems.sort(function(a, b) {
-        var relation = comparator(a.label, b.label)
-        return relation
-          ? (relation > 0 && b.label !== "(no info)") || a.label === "(no info)"
-            ? 1
-            : -1
-          : 0
-      })
-
-      // check whether there are too many buckets to look awesome, and if so, combine them
-      // into bigger chunks
-      var reducingFactor = Math.ceil(allSortedItems.length / 12)
-      if (reducingFactor > 1) {
-        var combinedItems = [],
-          curBucketValues,
-          curBucketItems,
-          curBucket
-        allSortedItems.forEach(function(bucket, index) {
-          if (index % reducingFactor === 0 || bucket.label === "(no info)") {
-            // start a new bucket!
-            curBucket = {
-              label: bucket.label,
-            }
-            combinedItems.push(curBucket)
-            curBucketValues = curBucket.values = bucket.values
-            curBucketItems = curBucket.items = bucket.items
-          } else {
-            // continue an existing bucket!
-            curBucketValues.push(bucket.values[0])
-            var id,
-              items = bucket.items
-            for (id in items) {
-              if (hasOwnProperty.call(items, id)) {
-                curBucketItems[id] = items[id]
-              }
-            }
-
-            // check whether we should end working on this bucket
-            if (
-              index % reducingFactor === reducingFactor - 1 ||
-              index === allSortedItems.length - 1 ||
-              allSortedItems[index + 1].label === "(no info)"
-            ) {
-              // end the current bucket!
-              curBucket.label += " to " + bucket.label
-            }
-          }
-        })
-        // now that we're done combining stuff, put it back in allSortedItems
-        allSortedItems = combinedItems
-      }
-
-      // one last thing: transform our item lists from object to array
-      allSortedItems.forEach(function(bucket) {
-        var arr = [],
-          id,
-          items = bucket.items
-        for (id in items) {
-          if (hasOwnProperty.call(items, id)) {
-            arr.push(items[id])
-          }
-        }
-        bucket.items = arr
-      })
-
-      return allSortedItems
-    },
-    Number: function(facetName, isDate) {
-      var item,
-        facetData,
-        max = -Infinity,
-        min = Infinity,
-        buckets = [],
-        bucketWidth,
-        i,
-        noInfoItems,
-        noInfoBucket,
-        highestIndex,
-        upperBound,
-        leftLabel,
-        rightLabel,
-        putInBucket
-
-      // first, find max and min
-      function updateMinMax(value) {
-        if (value > max) {
-          max = value
-        }
-        if (value < min) {
-          min = value
-        }
-      }
-      for (i = activeItemsArr.length - 1; i >= 0; i--) {
-        item = activeItemsArr[i]
-        facetData = item.facets[facetName]
-        if (facetData) {
-          // any facet can have any number of values, and we'll use all of them.
-          facetData.forEach(updateMinMax)
-        } else {
-          noInfoItems = true
-        }
-      }
-
-      if (isDate) {
-        // choose the bucket size.
-        buckets = PivotDate_generateBuckets(min, max)
-      } else {
-        // next, choose the bucket size. this should make at least 4 bars, but no more than 11.
-        bucketWidth = makeFriendlyNumber((max - min) / 4)
-
-        // adjust min so it's friendly-value aligned
-        if (bucketWidth) {
-          min = bucketWidth * Math.floor(min / bucketWidth)
-        }
-
-        // most buckets will be closed on the lower end of their range and open on the upper end:
-        // [min, max). The topmost bucket, however, includes its upper bound.
-        // set them up here.
-        for (
-          i = min;
-          i < max || (bucketWidth === 0 && !buckets.length);
-          i += bucketWidth
-        ) {
-          upperBound = i + bucketWidth
-          // TODO this should change depending on custom number display options.
-          leftLabel = PivotNumber_format(i)
-          rightLabel = PivotNumber_format(upperBound)
-          buckets.push({
-            label: leftLabel + " to " + rightLabel,
-            lowerBound: i,
-            upperBound: upperBound,
-            leftLabel: leftLabel,
-            rightLabel: rightLabel,
-            items: [],
-          })
-        }
-      }
-
-      if (buckets.length) {
-        highestIndex = buckets.length - 1
-        buckets[highestIndex].inclusive = true
-      }
-      if (noInfoItems) {
-        noInfoBucket = []
-        buckets.push({
-          label: "(no info)",
-          items: noInfoBucket,
-        })
-      }
-
-      // set up the function that is responsible for putting the current item
-      // into one of the possible arrays, given its facet value (Number or DateTime).
-      putInBucket = isDate
-        ? function(value) {
-            // since the width of each bucket isn't constant (some months
-            // are longer and such), we iterate over the bucket categories.
-            // A bit less elegant than the solution for Numbers, but still
-            // technically constant time since we guarantee there will never
-            // be more than 16 buckets.
-            var i, bucket
-            for (i = 0; i <= highestIndex; i++) {
-              bucket = buckets[i]
-              if (value < bucket.upperBound || i === highestIndex) {
-                bucket.items.push(item)
-                break
-              }
-            }
-          }
-        : function(value) {
-            var index = Math.floor((value - min) / bucketWidth)
-            // check for arithmetic error or width 0
-            if (isNaN(index) || index < 0) {
-              index = 0
-            }
-            if (index > highestIndex) {
-              index = highestIndex
-            }
-            buckets[index].items.push(item)
-          }
-
-      // now iterate over the items again, putting them in the appropriate bucket.
-      // note that each item may be listed in multiple buckets.
-      for (i = activeItemsArr.length - 1; i >= 0; i--) {
-        item = activeItemsArr[i]
-        facetData = item.facets[facetName]
-        if (facetData) {
-          facetData.forEach(putInBucket)
-        } else {
-          noInfoBucket.push(item)
-        }
-      }
-
-      return buckets
-    },
-  }
-  bucketize.LongString = bucketize.String
-  // links are a lot like strings, so we'll reuse the bucketizing code
-  bucketize.Link = bucketize.String
-  // likewise DateTimes can share some code with Numbers
-  bucketize.DateTime = function(facetName) {
-    return bucketize.Number(facetName, true)
-  }
 
   // we need to lay out items in a grid, but we don't know ahead of time what
   // shape the items will be, or if they're all exactly the same shape. so we
@@ -1234,7 +969,7 @@ var PivotViewer = (Pivot.PivotViewer = function(
       topLeftItemInfo = gridInfo.topLeft
       rightmostItemInfo = gridInfo.rightmost
     } else {
-      allSortedItems = bucketize[facet.type || "String"](sortFacet)
+      allSortedItems = _activeGroups
 
       var barWidth = containerRect.width / allSortedItems.length
       var innerBarWidth = barWidth * 0.86
@@ -2918,9 +2653,39 @@ var PivotViewer = (Pivot.PivotViewer = function(
     items.forEach(item => {
       _activeItems[item.id] = item
       _activeItemsArr.push(item)
+
+      // FIXME: Workaround for NPE
+      // This should be set in `updateTemplate` but we still get NPE:
+      item.html = []
     })
 
-    this.filter()
+    this.gridView()
+  }
+
+  this.setActiveGroups = groups => {
+    groups.forEach(group => {
+      const { items } = group
+      this.addItems(items)
+    })
+
+    // clear active items
+    _activeItems = {}
+    _activeItemsArr = []
+    _activeGroups = groups
+
+    groups.forEach(group => {
+      const { items } = group
+      items.forEach(item => {
+        _activeItems[item.id] = item
+        _activeItemsArr.push(item)
+
+        // FIXME: Workaround for NPE
+        // This should be set in `updateTemplate` but we still get NPE:
+        item.html = []
+      })
+    })
+
+    this.graphView()
   }
 
   /**
