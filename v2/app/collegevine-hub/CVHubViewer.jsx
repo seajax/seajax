@@ -1094,28 +1094,31 @@ var PivotViewer = (Pivot.PivotViewer = function(
               4
           ) + "px"
 
-        // keep track of all bars we make
-        var filterValues
-        switch (facets[sortFacet].type) {
-          case "String":
-          case "Link":
-            filterValues = currentCategory.values
-            break
-          case "Number":
-          case "DateTime":
-            filterValues = [
-              {
-                lowerBound: currentCategory.lowerBound,
-                upperBound: currentCategory.upperBound,
-                inclusive: currentCategory.inclusive,
-              },
-            ]
-            break
-          default:
-            Seadragon2.Debug.warn(
-              "Unrecognized category type: " + facets[sortFacet].type
-            )
-        }
+        // TODO: APP-2170: Restore this for click-to-filter
+        var filterValues = []
+
+        // // keep track of all bars we make
+        // var filterValues
+        // switch (facets[sortFacet].type) {
+        //   case "String":
+        //   case "Link":
+        //     filterValues = currentCategory.values
+        //     break
+        //   case "Number":
+        //   case "DateTime":
+        //     filterValues = [
+        //       {
+        //         lowerBound: currentCategory.lowerBound,
+        //         upperBound: currentCategory.upperBound,
+        //         inclusive: currentCategory.inclusive,
+        //       },
+        //     ]
+        //     break
+        //   default:
+        //     Seadragon2.Debug.warn(
+        //       "Unrecognized category type: " + facets[sortFacet].type
+        //     )
+        // }
         bars.push({
           bar: bar,
           values: filterValues,
@@ -1718,7 +1721,9 @@ var PivotViewer = (Pivot.PivotViewer = function(
         self.trigger("filterrequest", {
           facet: sortFacet,
           values: hoveredBar.values,
-          type: facets[sortFacet].type,
+          // // TODO: APP-2170: Restore this for click-to-filter
+          // type: facets[sortFacet].type,
+          type: "String",
         })
       } else {
         // to mimic the functionality of real PivotViewer, most clicks go home
