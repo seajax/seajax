@@ -2305,7 +2305,6 @@ var PivotViewer = (Pivot.PivotViewer = function(
       canvasArray = (item.canvas = []),
       oldSdimgArray = item.sdimg,
       sdimgArray = (item.sdimg = []),
-      renderer,
       serverItemsArray,
       isNewItem = !oldHtmlArray
 
