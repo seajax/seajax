@@ -2080,82 +2080,6 @@ var PivotViewer = (Pivot.PivotViewer = function(
     rearrange()
   }
 
-  // Methods -- CONTENT
-
-  /**
-   * Set new facet categories for the collection. This method can only be called when the
-   * viewer is empty, which means before any calls to addItems or after the "itemsCleared"
-   * event has been triggered in response to a clearItems call.
-   * @method setFacets
-   * @param newFacets {object} The new facet categories. The property names in this object
-   * are the names of the categories, and the values of the properties are objects describing
-   * the categories. Each category description should have the following properties:
-   * <dl>
-   * <dt>type</dt><dd>string - The type of facet category. Valid types are "String",
-   * "LongString" (which gets treated like String), "Number", "DateTime", and "Link".</dd>
-   * <dt>isFilterVisible</dt><dd>bool - Whether the facet shows up in the filter selection
-   * pane and the sort order drop-down</dd>
-   * <dt>isWordWheelVisible</dt><dd>bool - Whether the facet category will be accessible via
-   * the search box</dd>
-   * <dt>isMetaDataVisible</dt><dd>bool - Whether the facet shows up in the details pane</dd>
-   * <dt>orders</dt><dd>optional Array - Allows you to set custom sort orders for String
-   * facets other than the default alphabetical and most-common-first orders. Each element
-   * in this array must have a "name" string property and an "order" array of strings, which
-   * contains all possible facet values in the desired order.</dd>
-   * </dl>
-   */
-  this.setFacets = function(newFacets) {
-    if (items.length) {
-      throw "You must set facet categories before adding items."
-    }
-
-    // the old filters probably won't make any sense anymore, and
-    // the view portion forgets them automatically.
-    filters = []
-
-    facets = newFacets
-
-    // look through the newly added facets and set up comparators
-    // for any facets that define a custom sort order
-    var facetName, facetData, orders
-    for (facetName in facets) {
-      if (hasOwnProperty.call(facets, facetName)) {
-        facetData = facets[facetName]
-        orders = facetData.orders
-        if (orders && orders.length) {
-          // make a new variable scope so we can bind by value
-          ;(function() {
-            var orderArray = orders[0].order,
-              orderMap = {}
-            orderArray.forEach(function(value, index) {
-              orderMap[value] = index
-            })
-            facetData.comparator = function(a, b) {
-              var isAOrdered = hasOwnProperty.call(orderMap, a),
-                isBOrdered = hasOwnProperty.call(orderMap, b)
-              return isAOrdered
-                ? isBOrdered
-                  ? orderMap[a] - orderMap[b]
-                  : -1
-                : isBOrdered
-                ? 1
-                : a === b
-                ? 0
-                : a > b
-                ? 1
-                : -1
-            }
-          })()
-        }
-      }
-    }
-
-    // fire an event so that the UI components can update themselves
-    self.trigger("hideDetails")
-    self.trigger("hideInfoButton")
-    self.trigger("facetsSet", facets)
-  }
-
   // Helpers -- TEMPLATING
 
   function pollForContent() {
@@ -2500,7 +2424,6 @@ var PivotViewer = (Pivot.PivotViewer = function(
    * <dt>description</dt><dd>string - Extra text information about the item</dd>
    * <dt>href</dt><dd>string - The URL associated with the item</dd>
    * <dt>img</dt><dd>string - The URL of the DZI or DZC image for the item</dd>
-   * <dt>facets</dt><dd>object - Facet data. Property names are facet categories; property values
    * are arrays of values for that facet (strings, numbers, or dates, depending on the facet type).
    * Even if there is only one value for a particular facet, it must be in an array.
    * </dl>
@@ -2572,9 +2495,6 @@ var PivotViewer = (Pivot.PivotViewer = function(
       if (!item.href) {
         item.href = ""
       }
-      if (!item.facets) {
-        item.facets = {}
-      }
       if (!hasOwnProperty.call(allItemsById, id)) {
         allItemsById[id] = item
         actuallyNewItems.push(item)
@@ -2583,7 +2503,7 @@ var PivotViewer = (Pivot.PivotViewer = function(
       // refresh the details pane if necessary
       if (centerItem === item && zoomedIn && detailsEnabled) {
         self.trigger("hideDetails")
-        self.trigger("showDetails", item, facets)
+        self.trigger("showDetails", item)
       }
     })
     // now check to see whether we can immediately add items
