@@ -913,31 +913,6 @@ var PivotViewer = (Pivot.PivotViewer = function(
       // first, put the items in an array.
       allSortedItems = activeItemsArr
 
-      // second, sort it.
-      allSortedItems.sort(function(a, b) {
-        a = a.facets[sortFacet]
-        b = b.facets[sortFacet]
-        // check for undefined values! all facets are optional, but
-        // items without the facet listed should always be sorted last.
-        if (!a) {
-          if (!b) {
-            return 0
-          }
-          return 1
-        }
-        if (!b) {
-          return -1
-        }
-        // any facet may have multiple values, but we only sort by the first one
-        a = a[0]
-        b = b[0]
-
-        // from here on, the comparison depends on the type. sometimes string facets
-        // define custom comparators for orders that make more sense than alphabetical.
-        var comparator = facet.comparator || comparators[facet.type]
-        return comparator(a, b)
-      })
-
       // third, lay out the items in a grid.
       totalItemCount = allSortedItems.length
       // compute layout width
