@@ -2080,39 +2080,6 @@ var PivotViewer = (Pivot.PivotViewer = function(
     rearrange()
   }
 
-  /**
-   * Add a new filter to the viewer. Do not immediately start rearranging.
-   * @method addFilter
-   * @param filter {function} The filtering function. It takes one argument, a collection item,
-   * and returns true if the item is allowed and false if the item is filtered out.
-   */
-  this.addFilter = function(filter) {
-    if (typeof filter === "function") {
-      filters.push(filter)
-    }
-  }
-
-  /**
-   * Remove a filter from the viewer. Do not immediately start rearranging.
-   * @method removeFilter
-   * @param filter {function} The filtering function, which was previously added to the viewer
-   * by a call to addFilter.
-   */
-  this.removeFilter = function(filter) {
-    var index = filters.indexOf(filter)
-    if (index !== -1) {
-      filters.splice(index, 1)
-    }
-  }
-
-  /**
-   * Clear all filters from the viewer. Do not immediately start rearranging.
-   * @method clearFilters
-   */
-  this.clearFilters = function() {
-    filters = []
-  }
-
   // Methods -- CONTENT
 
   /**
