@@ -2624,25 +2624,6 @@ var PivotViewer = (Pivot.PivotViewer = function(
     return allItemsById[id]
   }
 
-
-  /**
-   * Get all items that are in based on all current filters except
-   * the provided one. This is important for generating the counts
-   * in the Pivot view's left rail.
-   * @method runFiltersWithout
-   * @param filter {function} the filter to not apply
-   * @return {array} All items filtered in, excluding the given filter
-   */
-  this.runFiltersWithout = function(filter) {
-    this.removeFilter(filter)
-    var result = items.filter(function(item) {
-      return filters.every(function(filter2) {
-        return filter2(item)
-      })
-    })
-    this.addFilter(filter)
-    return result
-  }
   // Constructor
   initialize()
 })
