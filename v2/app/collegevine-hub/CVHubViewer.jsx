@@ -2037,16 +2037,6 @@ var PivotViewer = (Pivot.PivotViewer = function(
   // Methods -- SORTING & FILTERING
 
   /**
-   * Sort the collection by the selected facet. The collection will immediately begin rearranging.
-   * @method sortBy
-   * @param facetName {string} the name of the facet category to sort by
-   */
-  this.sortBy = function(facetName) {
-    sortFacet = facetName
-    rearrange()
-  }
-
-  /**
    * Go to grid view, if the viewer is currently in graph view. Otherwise, do nothing.
    * @method gridView
    */
