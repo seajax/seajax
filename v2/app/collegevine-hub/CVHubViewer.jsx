@@ -2624,29 +2624,6 @@ var PivotViewer = (Pivot.PivotViewer = function(
     return allItemsById[id]
   }
 
-  /**
-   * Set the collection title.
-   * @method setTitle
-   * @param title {string} the new title
-   */
-  this.setTitle = function(title) {
-    // just raise an event so the UI can update
-    self.trigger("titleChange", title)
-  }
-
-  /**
-   * Set legal info for the collection.
-   * @method setCopyright
-   * @param legalInfo {object} Contains two properties:
-   * <dl>
-   * <dt>name</dt><dd>string - The name to display</dd>
-   * <dt>href</dt><dd>string - The URL for more information</dd>
-   * </dl>
-   */
-  this.setCopyright = function(legalInfo) {
-    // fire an event so the UI can update
-    self.trigger("copyright", legalInfo)
-  }
 
   /**
    * Get all items that are in based on all current filters except
