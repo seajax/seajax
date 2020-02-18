@@ -1731,6 +1731,10 @@ var PivotViewer = (Pivot.PivotViewer = function(
         viewport.goHome()
       }
 
+      if (selectedItem) {
+        self.trigger("itemClick", selectedItem)
+      }
+
       // only if we didn't ignore this click, reset the double-click timer
       lastClickTime = now
     }
