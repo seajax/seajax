@@ -1751,8 +1751,8 @@ var PivotViewer = (Pivot.PivotViewer = function(
         viewport.goHome()
       }
 
-      if (selectedItem && self.focusSchoolCallback) {
-        self.focusSchoolCallback(selectedItem.id)
+      if (selectedItem) {
+        self.trigger("itemClicked", selectedItem.id)
       }
 
       // only if we didn't ignore this click, reset the double-click timer
