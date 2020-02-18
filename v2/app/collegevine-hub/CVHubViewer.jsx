@@ -913,31 +913,6 @@ var PivotViewer = (Pivot.PivotViewer = function(
       // first, put the items in an array.
       allSortedItems = activeItemsArr
 
-      // second, sort it.
-      allSortedItems.sort(function(a, b) {
-        a = a.facets[sortFacet]
-        b = b.facets[sortFacet]
-        // check for undefined values! all facets are optional, but
-        // items without the facet listed should always be sorted last.
-        if (!a) {
-          if (!b) {
-            return 0
-          }
-          return 1
-        }
-        if (!b) {
-          return -1
-        }
-        // any facet may have multiple values, but we only sort by the first one
-        a = a[0]
-        b = b[0]
-
-        // from here on, the comparison depends on the type. sometimes string facets
-        // define custom comparators for orders that make more sense than alphabetical.
-        var comparator = facet.comparator || comparators[facet.type]
-        return comparator(a, b)
-      })
-
       // third, lay out the items in a grid.
       totalItemCount = allSortedItems.length
       // compute layout width
@@ -1119,28 +1094,31 @@ var PivotViewer = (Pivot.PivotViewer = function(
               4
           ) + "px"
 
-        // keep track of all bars we make
-        var filterValues
-        switch (facets[sortFacet].type) {
-          case "String":
-          case "Link":
-            filterValues = currentCategory.values
-            break
-          case "Number":
-          case "DateTime":
-            filterValues = [
-              {
-                lowerBound: currentCategory.lowerBound,
-                upperBound: currentCategory.upperBound,
-                inclusive: currentCategory.inclusive,
-              },
-            ]
-            break
-          default:
-            Seadragon2.Debug.warn(
-              "Unrecognized category type: " + facets[sortFacet].type
-            )
-        }
+        // TODO: APP-2170: Restore this for click-to-filter
+        var filterValues = []
+
+        // // keep track of all bars we make
+        // var filterValues
+        // switch (facets[sortFacet].type) {
+        //   case "String":
+        //   case "Link":
+        //     filterValues = currentCategory.values
+        //     break
+        //   case "Number":
+        //   case "DateTime":
+        //     filterValues = [
+        //       {
+        //         lowerBound: currentCategory.lowerBound,
+        //         upperBound: currentCategory.upperBound,
+        //         inclusive: currentCategory.inclusive,
+        //       },
+        //     ]
+        //     break
+        //   default:
+        //     Seadragon2.Debug.warn(
+        //       "Unrecognized category type: " + facets[sortFacet].type
+        //     )
+        // }
         bars.push({
           bar: bar,
           values: filterValues,
@@ -1743,7 +1721,9 @@ var PivotViewer = (Pivot.PivotViewer = function(
         self.trigger("filterrequest", {
           facet: sortFacet,
           values: hoveredBar.values,
-          type: facets[sortFacet].type,
+          // // TODO: APP-2170: Restore this for click-to-filter
+          // type: facets[sortFacet].type,
+          type: "String",
         })
       } else {
         // to mimic the functionality of real PivotViewer, most clicks go home
@@ -2057,16 +2037,6 @@ var PivotViewer = (Pivot.PivotViewer = function(
   // Methods -- SORTING & FILTERING
 
   /**
-   * Sort the collection by the selected facet. The collection will immediately begin rearranging.
-   * @method sortBy
-   * @param facetName {string} the name of the facet category to sort by
-   */
-  this.sortBy = function(facetName) {
-    sortFacet = facetName
-    rearrange()
-  }
-
-  /**
    * Go to grid view, if the viewer is currently in graph view. Otherwise, do nothing.
    * @method gridView
    */
@@ -2098,115 +2068,6 @@ var PivotViewer = (Pivot.PivotViewer = function(
    */
   this.filter = function() {
     rearrange()
-  }
-
-  /**
-   * Add a new filter to the viewer. Do not immediately start rearranging.
-   * @method addFilter
-   * @param filter {function} The filtering function. It takes one argument, a collection item,
-   * and returns true if the item is allowed and false if the item is filtered out.
-   */
-  this.addFilter = function(filter) {
-    if (typeof filter === "function") {
-      filters.push(filter)
-    }
-  }
-
-  /**
-   * Remove a filter from the viewer. Do not immediately start rearranging.
-   * @method removeFilter
-   * @param filter {function} The filtering function, which was previously added to the viewer
-   * by a call to addFilter.
-   */
-  this.removeFilter = function(filter) {
-    var index = filters.indexOf(filter)
-    if (index !== -1) {
-      filters.splice(index, 1)
-    }
-  }
-
-  /**
-   * Clear all filters from the viewer. Do not immediately start rearranging.
-   * @method clearFilters
-   */
-  this.clearFilters = function() {
-    filters = []
-  }
-
-  // Methods -- CONTENT
-
-  /**
-   * Set new facet categories for the collection. This method can only be called when the
-   * viewer is empty, which means before any calls to addItems or after the "itemsCleared"
-   * event has been triggered in response to a clearItems call.
-   * @method setFacets
-   * @param newFacets {object} The new facet categories. The property names in this object
-   * are the names of the categories, and the values of the properties are objects describing
-   * the categories. Each category description should have the following properties:
-   * <dl>
-   * <dt>type</dt><dd>string - The type of facet category. Valid types are "String",
-   * "LongString" (which gets treated like String), "Number", "DateTime", and "Link".</dd>
-   * <dt>isFilterVisible</dt><dd>bool - Whether the facet shows up in the filter selection
-   * pane and the sort order drop-down</dd>
-   * <dt>isWordWheelVisible</dt><dd>bool - Whether the facet category will be accessible via
-   * the search box</dd>
-   * <dt>isMetaDataVisible</dt><dd>bool - Whether the facet shows up in the details pane</dd>
-   * <dt>orders</dt><dd>optional Array - Allows you to set custom sort orders for String
-   * facets other than the default alphabetical and most-common-first orders. Each element
-   * in this array must have a "name" string property and an "order" array of strings, which
-   * contains all possible facet values in the desired order.</dd>
-   * </dl>
-   */
-  this.setFacets = function(newFacets) {
-    if (items.length) {
-      throw "You must set facet categories before adding items."
-    }
-
-    // the old filters probably won't make any sense anymore, and
-    // the view portion forgets them automatically.
-    filters = []
-
-    facets = newFacets
-
-    // look through the newly added facets and set up comparators
-    // for any facets that define a custom sort order
-    var facetName, facetData, orders
-    for (facetName in facets) {
-      if (hasOwnProperty.call(facets, facetName)) {
-        facetData = facets[facetName]
-        orders = facetData.orders
-        if (orders && orders.length) {
-          // make a new variable scope so we can bind by value
-          ;(function() {
-            var orderArray = orders[0].order,
-              orderMap = {}
-            orderArray.forEach(function(value, index) {
-              orderMap[value] = index
-            })
-            facetData.comparator = function(a, b) {
-              var isAOrdered = hasOwnProperty.call(orderMap, a),
-                isBOrdered = hasOwnProperty.call(orderMap, b)
-              return isAOrdered
-                ? isBOrdered
-                  ? orderMap[a] - orderMap[b]
-                  : -1
-                : isBOrdered
-                ? 1
-                : a === b
-                ? 0
-                : a > b
-                ? 1
-                : -1
-            }
-          })()
-        }
-      }
-    }
-
-    // fire an event so that the UI components can update themselves
-    self.trigger("hideDetails")
-    self.trigger("hideInfoButton")
-    self.trigger("facetsSet", facets)
   }
 
   // Helpers -- TEMPLATING
@@ -2434,7 +2295,6 @@ var PivotViewer = (Pivot.PivotViewer = function(
       canvasArray = (item.canvas = []),
       oldSdimgArray = item.sdimg,
       sdimgArray = (item.sdimg = []),
-      renderer,
       serverItemsArray,
       isNewItem = !oldHtmlArray
 
@@ -2553,7 +2413,6 @@ var PivotViewer = (Pivot.PivotViewer = function(
    * <dt>description</dt><dd>string - Extra text information about the item</dd>
    * <dt>href</dt><dd>string - The URL associated with the item</dd>
    * <dt>img</dt><dd>string - The URL of the DZI or DZC image for the item</dd>
-   * <dt>facets</dt><dd>object - Facet data. Property names are facet categories; property values
    * are arrays of values for that facet (strings, numbers, or dates, depending on the facet type).
    * Even if there is only one value for a particular facet, it must be in an array.
    * </dl>
@@ -2625,9 +2484,6 @@ var PivotViewer = (Pivot.PivotViewer = function(
       if (!item.href) {
         item.href = ""
       }
-      if (!item.facets) {
-        item.facets = {}
-      }
       if (!hasOwnProperty.call(allItemsById, id)) {
         allItemsById[id] = item
         actuallyNewItems.push(item)
@@ -2636,7 +2492,7 @@ var PivotViewer = (Pivot.PivotViewer = function(
       // refresh the details pane if necessary
       if (centerItem === item && zoomedIn && detailsEnabled) {
         self.trigger("hideDetails")
-        self.trigger("showDetails", item, facets)
+        self.trigger("showDetails", item)
       }
     })
     // now check to see whether we can immediately add items
@@ -2756,116 +2612,6 @@ var PivotViewer = (Pivot.PivotViewer = function(
    */
   this.getItemById = function(id) {
     return allItemsById[id]
-  }
-
-  /**
-   * Set the collection title.
-   * @method setTitle
-   * @param title {string} the new title
-   */
-  this.setTitle = function(title) {
-    // just raise an event so the UI can update
-    self.trigger("titleChange", title)
-  }
-
-  /**
-   * Set legal info for the collection.
-   * @method setCopyright
-   * @param legalInfo {object} Contains two properties:
-   * <dl>
-   * <dt>name</dt><dd>string - The name to display</dd>
-   * <dt>href</dt><dd>string - The URL for more information</dd>
-   * </dl>
-   */
-  this.setCopyright = function(legalInfo) {
-    // fire an event so the UI can update
-    self.trigger("copyright", legalInfo)
-  }
-
-  /**
-   * Get all items that are in based on all current filters except
-   * the provided one. This is important for generating the counts
-   * in the Pivot view's left rail.
-   * @method runFiltersWithout
-   * @param filter {function} the filter to not apply
-   * @return {array} All items filtered in, excluding the given filter
-   */
-  this.runFiltersWithout = function(filter) {
-    this.removeFilter(filter)
-    var result = items.filter(function(item) {
-      return filters.every(function(filter2) {
-        return filter2(item)
-      })
-    })
-    this.addFilter(filter)
-    return result
-  }
-
-  function countResult(results, str) {
-    if (hasOwnProperty.call(results, str)) {
-      results[str]++
-    } else {
-      results[str] = 1
-    }
-  }
-
-  /**
-   * Look for all facet values containing the given search term.
-   * If the splitResults argument is true, this function
-   * returns an object with two properties: front, which contains
-   * matches where the search string matches the beginning of the
-   * facet value, and rest, which contains other matches.
-   * Otherwise, it returns only one object, with all matches.
-   * @method runSearch
-   * @param searchTerm {string} The string to find
-   * @param splitResults {bool} Whether to split the results into two sets:
-   * those where the beginning of the string matches, and those where any
-   * substring matches.
-   * @return {object} The results of the search. Property names are the
-   * matching strings; property values are the number of matches with that string.
-   */
-  this.runSearch = function(searchTerm, splitResults) {
-    var frontResults, restResults, result
-    if (splitResults) {
-      frontResults = {}
-      restResults = {}
-      result = {
-        front: frontResults,
-        rest: restResults,
-      }
-    } else {
-      frontResults = restResults = {}
-    }
-    searchTerm = searchTerm.toLowerCase()
-    function checkResult(value) {
-      // deal with Link type
-      value = value.content || value
-      // deal with Number and Date types
-      if (typeof value === "number") {
-        value = PivotNumber_format(value)
-      } else if (value instanceof Date) {
-        value = value.toLocaleDateString() + " " + value.toLocaleTimeString()
-      }
-      var match = value.toLowerCase().indexOf(searchTerm)
-      if (match === 0) {
-        countResult(frontResults, value)
-      } else if (match > 0) {
-        countResult(restResults, value)
-      }
-    }
-    if (searchTerm) {
-      items.forEach(function(item) {
-        var facets = item.facets,
-          facetName
-        for (facetName in facets) {
-          if (hasOwnProperty.call(facets, facetName)) {
-            facets[facetName].forEach(checkResult)
-          }
-        }
-        checkResult(item.name)
-      })
-    }
-    return result
   }
 
   // Constructor
