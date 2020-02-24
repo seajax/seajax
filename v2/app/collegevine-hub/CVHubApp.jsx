@@ -12,7 +12,12 @@
  * @param container {HTMLElement} The container element
  * @return {Pivot.PivotViewer}
  */
-var Pivot_init = (Pivot.init = function(container) {
+var Pivot_init = (Pivot.init = function({
+  container,
+  leftRailWidth = 0,
+  rightRailWidth = 0,
+  padding = 0,
+}) {
   // clear out the workspace we've been provided
   while (container.firstChild) {
     container.removeChild(container.firstChild)
@@ -39,16 +44,14 @@ var Pivot_init = (Pivot.init = function(container) {
   canvas.width = canvas.offsetWidth
   var frontLayer = makeElement("div", "pivot pivot_layer", mouseBox)
 
-  var railWidth = 0
-
   // The actual viewer object that will do zooming, panning, layout, and animation.
   var viewer = new PivotViewer(
     canvas,
     mouseBox,
     frontLayer,
     behindLayer,
-    railWidth,
-    railWidth,
+    leftRailWidth + padding,
+    rightRailWidth + padding,
     inputElmt
   )
 
