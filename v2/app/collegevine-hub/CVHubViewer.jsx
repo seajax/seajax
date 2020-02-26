@@ -1094,37 +1094,14 @@ var PivotViewer = (Pivot.PivotViewer = function(
               4
           ) + "px"
 
-        // TODO: APP-2170: Restore this for click-to-filter
-        var filterValues = []
-
-        // // keep track of all bars we make
-        // var filterValues
-        // switch (facets[sortFacet].type) {
-        //   case "String":
-        //   case "Link":
-        //     filterValues = currentCategory.values
-        //     break
-        //   case "Number":
-        //   case "DateTime":
-        //     filterValues = [
-        //       {
-        //         lowerBound: currentCategory.lowerBound,
-        //         upperBound: currentCategory.upperBound,
-        //         inclusive: currentCategory.inclusive,
-        //       },
-        //     ]
-        //     break
-        //   default:
-        //     Seadragon2.Debug.warn(
-        //       "Unrecognized category type: " + facets[sortFacet].type
-        //     )
-        // }
         bars.push({
-          bar: bar,
-          values: filterValues,
+          bar,
           min: barWidth * i,
           name: currentCategory.label,
           count: totalItemCount,
+          // filter request data
+          facet: currentCategory.facet,
+          filter: currentCategory.filter,
         })
       }
     }
@@ -1717,13 +1694,9 @@ var PivotViewer = (Pivot.PivotViewer = function(
         // move there
         viewport.fitBounds(itemBounds)
       } else if (!hoveredItem && hoveredBar) {
-        // add a filter
         self.trigger("filterrequest", {
-          facet: sortFacet,
-          values: hoveredBar.values,
-          // // TODO: APP-2170: Restore this for click-to-filter
-          // type: facets[sortFacet].type,
-          type: "String",
+          facet: hoveredBar.facet,
+          filter: hoveredBar.filter,
         })
       } else {
         // to mimic the functionality of real PivotViewer, most clicks go home
