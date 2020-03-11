@@ -91,7 +91,6 @@ var PivotViewer = (Pivot.PivotViewer = function(
   var rearrangingItemsArr = []
 
   // external
-  let _activeItems = {}
   let _activeItemsArr = []
   let _activeGroups = []
 
@@ -204,21 +203,10 @@ var PivotViewer = (Pivot.PivotViewer = function(
     // run all current filters, and put the array contents in a set.
     // if this method is slow, try moving the inner function out here and keeping
     // a current-item variable instead of a closure. this way looks cleaner though.
-    items.forEach(function(item) {
-      if (
-        filters.every(function(filter) {
-          return filter(item)
-        })
-      ) {
-        activeItems[item.id] = item
-        activeItemsArr.push(item)
-      }
+    _activeItemsArr.forEach(function(item) {
+      activeItems[item.id] = item
+      activeItemsArr.push(item)
     })
-  }
-
-  function setExternalActiveItems() {
-    activeItems = _activeItems
-    activeItemsArr = _activeItemsArr
   }
 
   // Helpers -- ARRANGEMENT
@@ -879,7 +867,7 @@ var PivotViewer = (Pivot.PivotViewer = function(
     prevActiveItems = Seadragon2.Object.clone(currentItems)
 
     // now that the viewport has zoomed to its default position, run the filters
-    setExternalActiveItems()
+    runFilters()
 
     // get rid of any grid bars we've drawn before
     backLayer.innerHTML = ""
@@ -2476,50 +2464,51 @@ var PivotViewer = (Pivot.PivotViewer = function(
     onLoad()
   }
 
-  this.setActiveItems = items => {
-    this.addItems(items)
+  // APP-2305: IMPORTANT: HTML templates are only initialized correctly if we
+  // call `addItems` at most once. We track whether we’ve called `addItems`
+  // already via `hasAddedItems`:
+  let hasAddedItems = false
 
-    // clear active items
-    _activeItems = {}
-    _activeItemsArr = []
-    _activeGroups = []
+  this.setActiveItems = newItems => {
+    if (!hasAddedItems) {
+      this.addItems(newItems)
+      hasAddedItems = true
+    }
 
-    items.forEach(item => {
-      _activeItems[item.id] = item
-      _activeItemsArr.push(item)
-
-      // FIXME: Workaround for NPE
-      // This should be set in `updateTemplate` but we still get NPE:
-      item.html = []
-    })
+    _activeItemsArr = newItems
 
     this.gridView()
+    // force rearrange in case we are already in grid view, similar to old
+    // `sortBy` function:
+    rearrange()
   }
 
   this.setActiveGroups = groups => {
-    groups.forEach(group => {
-      const { items } = group
-      this.addItems(items)
-    })
+    if (!hasAddedItems) {
+      let allItems = groups.reduce((results, group) => {
+        const { items } = group
+        return results.concat(items)
+      }, [])
+
+      this.addItems(allItems)
+      hasAddedItems = true
+    }
 
     // clear active items
-    _activeItems = {}
     _activeItemsArr = []
     _activeGroups = groups
 
     groups.forEach(group => {
       const { items } = group
       items.forEach(item => {
-        _activeItems[item.id] = item
         _activeItemsArr.push(item)
-
-        // FIXME: Workaround for NPE
-        // This should be set in `updateTemplate` but we still get NPE:
-        item.html = []
       })
     })
 
     this.graphView()
+    // force rearrange in case we are already in graph view, similar to old
+    // `sortBy` function:
+    rearrange()
   }
 
   /**
