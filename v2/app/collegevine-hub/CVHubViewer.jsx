@@ -692,9 +692,9 @@ var PivotViewer = (Pivot.PivotViewer = function(
       rightmost = lastRow[lastRow.length - 1]
     }
     return {
-      topLeft: topLeft,
-      lowest: lowest,
-      rightmost: rightmost,
+      topLeft,
+      lowest,
+      rightmost,
       itemWidth: paddedWidth,
     }
   }
