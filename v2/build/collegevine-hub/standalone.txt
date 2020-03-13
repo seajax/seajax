@@ -55,7 +55,7 @@ zoomcontainer/Viewer.js
 ../app/pivot/Date.js
 ../app/pivot/DatePicker.js
 ../app/pivot/Slider.js
-../app/pivot/Template.js
 ../app/pivot/Lzw.js
+../app/collegevine-hub/CVTemplate.js
 ../app/collegevine-hub/CVHubViewer.js
 ../app/collegevine-hub/CVHubApp.js
