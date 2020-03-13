@@ -104,8 +104,6 @@ var PivotViewer = (Pivot.PivotViewer = function(
 
   var ctx = canvas.getContext("2d")
 
-  var filters = []
-
   var lastMousePosition
   var hoveredItem
   var hoveredItemIndex // which of the hovered item's positions actually has the mouse
@@ -551,15 +549,15 @@ var PivotViewer = (Pivot.PivotViewer = function(
     }
   }
 
-  function placeGrid(
+  function placeGrid({
     verticalOffset,
     horizontalOffset,
     allSortedItems,
     numPerRow,
     widthPerItem,
     heightPerItem,
-    upward
-  ) {
+    upward = false,
+  }) {
     var totalItemCount = allSortedItems.length,
       itemsPlaced = 0,
       i,
@@ -692,9 +690,9 @@ var PivotViewer = (Pivot.PivotViewer = function(
       rightmost = lastRow[lastRow.length - 1]
     }
     return {
-      topLeft: topLeft,
-      lowest: lowest,
-      rightmost: rightmost,
+      topLeft,
+      lowest,
+      rightmost,
       itemWidth: paddedWidth,
     }
   }
@@ -920,18 +918,19 @@ var PivotViewer = (Pivot.PivotViewer = function(
         )
       }
 
-      var gridInfo = placeGrid(
-        0,
-        0,
+      var gridInfo = placeGrid({
+        verticalOffset: 0,
+        horizontalOffset: 0,
         allSortedItems,
         numPerRow,
         widthPerItem,
-        widthPerItem * avgHeight
-      )
+        heightPerItem: widthPerItem * avgHeight,
+      })
       finalItemWidth = gridInfo.itemWidth
       topLeftItemInfo = gridInfo.topLeft
       rightmostItemInfo = gridInfo.rightmost
     } else {
+      // graph view
       allSortedItems = _activeGroups
 
       var barWidth = containerRect.width / allSortedItems.length
@@ -983,7 +982,7 @@ var PivotViewer = (Pivot.PivotViewer = function(
 
       // now go through and put all of the items in a location
       for (i = 0; i < allSortedItems.length; i++) {
-        var horizOffset = barWidth * (i + 0.07)
+        var horizontalOffset = barWidth * (i + 0.07)
         currentCategory = allSortedItems[i]
         totalItemCount = currentCategory.items.length
 
@@ -1020,25 +1019,34 @@ var PivotViewer = (Pivot.PivotViewer = function(
         // check for whether we need to center the row
         if (totalItemCount < numPerRow && totalItemCount > 0) {
           var adjustedWidth = (86 * totalItemCount) / numPerRow
-          horizOffset =
+          horizontalOffset =
             barWidth * i + (((100 - adjustedWidth) / 2) * barWidth) / 100
           adjustedWidth += 4
           // round to an even width, so it looks better
           adjustedWidth = Math.round(adjustedWidth / 2) * 2
-          innerBar.style.width = adjustedWidth + "px"
+          innerBar.style.width = `${adjustedWidth}px`
           innerBar.style.left = (98 - adjustedWidth) / 2 + "px"
         }
 
+        const numRows = Math.ceil(currentCategory.items.length / numPerRow)
+        const heightPerItem = widthPerItem * avgHeight
+        const innerBarBottomPadding = 4
+        const innerBarHeight = Math.round(
+          (100 * numRows * heightPerItem) / barWidth + 4
+        )
+        const verticalOffset =
+          containerRect.height -
+          (innerBarHeight - innerBarBottomPadding) / sizeRatio
+
         // place the items
-        curGridInfo = placeGrid(
-          containerRect.height,
-          horizOffset,
-          currentCategory.items,
+        curGridInfo = placeGrid({
+          verticalOffset,
+          horizontalOffset,
+          allSortedItems: currentCategory.items,
           numPerRow,
           widthPerItem,
-          widthPerItem * avgHeight,
-          true
-        )
+          heightPerItem,
+        })
         finalItemWidth = curGridInfo.itemWidth
 
         // keep track of global leftmost and rightmost items
@@ -1072,15 +1080,8 @@ var PivotViewer = (Pivot.PivotViewer = function(
         prevGridInfo = curGridInfo
 
         // set the height of the background bar
-        innerBar.style.height =
-          Math.round(
-            (100 *
-              Math.ceil(currentCategory.items.length / numPerRow) *
-              widthPerItem *
-              avgHeight) /
-              barWidth +
-              4
-          ) + "px"
+        innerBar.style.bottom = `${innerBarBottomPadding}px`
+        innerBar.style.height = `${innerBarHeight}px`
 
         bars.push({
           bar,
