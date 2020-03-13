@@ -982,7 +982,7 @@ var PivotViewer = (Pivot.PivotViewer = function(
 
       // now go through and put all of the items in a location
       for (i = 0; i < allSortedItems.length; i++) {
-        var horizOffset = barWidth * (i + 0.07)
+        var horizontalOffset = barWidth * (i + 0.07)
         currentCategory = allSortedItems[i]
         totalItemCount = currentCategory.items.length
 
@@ -1019,24 +1019,33 @@ var PivotViewer = (Pivot.PivotViewer = function(
         // check for whether we need to center the row
         if (totalItemCount < numPerRow && totalItemCount > 0) {
           var adjustedWidth = (86 * totalItemCount) / numPerRow
-          horizOffset =
+          horizontalOffset =
             barWidth * i + (((100 - adjustedWidth) / 2) * barWidth) / 100
           adjustedWidth += 4
           // round to an even width, so it looks better
           adjustedWidth = Math.round(adjustedWidth / 2) * 2
-          innerBar.style.width = adjustedWidth + "px"
+          innerBar.style.width = `${adjustedWidth}px`
           innerBar.style.left = (98 - adjustedWidth) / 2 + "px"
         }
 
+        const numRows = Math.ceil(currentCategory.items.length / numPerRow)
+        const heightPerItem = widthPerItem * avgHeight
+        const innerBarBottomPadding = 4
+        const innerBarHeight = Math.round(
+          (100 * numRows * heightPerItem) / barWidth + 4
+        )
+        const verticalOffset =
+          containerRect.height -
+          (innerBarHeight - innerBarBottomPadding) / sizeRatio
+
         // place the items
         curGridInfo = placeGrid({
-          verticalOffset: containerRect.height,
-          horizontalOffset: horizOffset,
+          verticalOffset,
+          horizontalOffset,
           allSortedItems: currentCategory.items,
           numPerRow,
           widthPerItem,
-          heightPerItem: widthPerItem * avgHeight,
-          upward: true,
+          heightPerItem,
         })
         finalItemWidth = curGridInfo.itemWidth
 
@@ -1071,15 +1080,8 @@ var PivotViewer = (Pivot.PivotViewer = function(
         prevGridInfo = curGridInfo
 
         // set the height of the background bar
-        innerBar.style.height =
-          Math.round(
-            (100 *
-              Math.ceil(currentCategory.items.length / numPerRow) *
-              widthPerItem *
-              avgHeight) /
-              barWidth +
-              4
-          ) + "px"
+        innerBar.style.bottom = `${innerBarBottomPadding}px`
+        innerBar.style.height = `${innerBarHeight}px`
 
         bars.push({
           bar,
