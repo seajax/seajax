@@ -930,6 +930,7 @@ var PivotViewer = (Pivot.PivotViewer = function(
       topLeftItemInfo = gridInfo.topLeft
       rightmostItemInfo = gridInfo.rightmost
     } else {
+      // graph view
       allSortedItems = _activeGroups
 
       var barWidth = containerRect.width / allSortedItems.length
