@@ -104,8 +104,6 @@ var PivotViewer = (Pivot.PivotViewer = function(
 
   var ctx = canvas.getContext("2d")
 
-  var filters = []
-
   var lastMousePosition
   var hoveredItem
   var hoveredItemIndex // which of the hovered item's positions actually has the mouse
