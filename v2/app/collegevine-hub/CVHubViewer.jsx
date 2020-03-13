@@ -551,15 +551,15 @@ var PivotViewer = (Pivot.PivotViewer = function(
     }
   }
 
-  function placeGrid(
+  function placeGrid({
     verticalOffset,
     horizontalOffset,
     allSortedItems,
     numPerRow,
     widthPerItem,
     heightPerItem,
-    upward
-  ) {
+    upward = false,
+  }) {
     var totalItemCount = allSortedItems.length,
       itemsPlaced = 0,
       i,
@@ -920,14 +920,14 @@ var PivotViewer = (Pivot.PivotViewer = function(
         )
       }
 
-      var gridInfo = placeGrid(
-        0,
-        0,
+      var gridInfo = placeGrid({
+        verticalOffset: 0,
+        horizontalOffset: 0,
         allSortedItems,
         numPerRow,
         widthPerItem,
-        widthPerItem * avgHeight
-      )
+        heightPerItem: widthPerItem * avgHeight,
+      })
       finalItemWidth = gridInfo.itemWidth
       topLeftItemInfo = gridInfo.topLeft
       rightmostItemInfo = gridInfo.rightmost
@@ -1030,15 +1030,15 @@ var PivotViewer = (Pivot.PivotViewer = function(
         }
 
         // place the items
-        curGridInfo = placeGrid(
-          containerRect.height,
-          horizOffset,
-          currentCategory.items,
+        curGridInfo = placeGrid({
+          verticalOffset: containerRect.height,
+          horizontalOffset: horizOffset,
+          allSortedItems: currentCategory.items,
           numPerRow,
           widthPerItem,
-          widthPerItem * avgHeight,
-          true
-        )
+          heightPerItem: widthPerItem * avgHeight,
+          upward: true,
+        })
         finalItemWidth = curGridInfo.itemWidth
 
         // keep track of global leftmost and rightmost items
