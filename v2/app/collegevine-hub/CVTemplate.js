@@ -112,8 +112,15 @@ var templateRegex = /<\?(?:\??[^>]+)*\?>/g,
       outputString = outputChunks.join("")
 
       if (type === "html" || type === "fakehtml") {
-        // return an HTML element whose inner HTML is based on the provided template.
-        result.unsetHTML = outputChunks.join("")
+        // return an HTML element whose inner HTML is based on the provided template
+        result.unsetHTML = outputString
+
+        // APP-2313: When updating the data of an existing items, Pivot never
+        // re-renders the item based on the template. We explicitly do this here:
+        var isExistingItem = result === parent
+        if (isExistingItem) {
+          result.innerHTML = outputString
+        }
       } else if (type === "color") {
         // return a function that paints a colored rectangle.
         result = function(ctx, x, y, width, height) {

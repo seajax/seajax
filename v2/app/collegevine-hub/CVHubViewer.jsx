@@ -2477,6 +2477,7 @@ var PivotViewer = (Pivot.PivotViewer = function(
     }
 
     _activeItemsArr = newItems
+    newItems.forEach(updateTemplate)
 
     this.gridView()
     // force rearrange in case we are already in grid view, similar to old
@@ -2502,6 +2503,7 @@ var PivotViewer = (Pivot.PivotViewer = function(
     groups.forEach(group => {
       const { items } = group
       items.forEach(item => {
+        updateTemplate(item)
         _activeItemsArr.push(item)
       })
     })
