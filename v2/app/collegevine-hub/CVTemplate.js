@@ -116,8 +116,11 @@ var templateRegex = /<\?(?:\??[^>]+)*\?>/g,
         result.unsetHTML = outputString
 
         // APP-2313: When updating the data of an existing items, Pivot never
-        // re-renders the item based on the template. We explicitly do this here:
-        var isExistingItem = result === parent
+        // re-renders the item based on the template. We explicitly do this here
+        // by setting the `innerHTML` property of an existing item. Its `parent`
+        // is already present indicating it’s currently part of the document
+        // (DOM):
+        var isExistingItem = parent && result === parent
         if (isExistingItem) {
           result.innerHTML = outputString
         }
