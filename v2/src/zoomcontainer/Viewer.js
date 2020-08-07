@@ -356,14 +356,10 @@ var SDViewer = SD.Viewer = function (container, options) {
         );
     }
 
-    function paddingChanged(padding, newPadding) {
-        return Object.keys(padding).some(key => padding[key] !== newPadding[key])
-    }
-
     (function () {
         containerWidth = SDMath_max(container.clientWidth, 1);
         containerHeight = SDMath_max(container.clientHeight, 1);
-        padding = Object.assign({}, self.padding);
+        padding = self.padding;
         var containerSize = new SDPoint(containerWidth, containerHeight),
             contentSize = self.contentSize || containerSize.times(1), // default is the container's pixel size
             zoomContainer,
@@ -433,10 +429,10 @@ var SDViewer = SD.Viewer = function (container, options) {
             var newContainerWidth = SDMath_max(container.clientWidth, 1),
                 newContainerHeight = SDMath_max(container.clientHeight, 1);
 
-            if (newContainerWidth !== containerWidth || newContainerHeight !== containerHeight || paddingChanged(padding, self.padding)) {
+            if (newContainerWidth !== containerWidth || newContainerHeight !== containerHeight || padding !== self.padding) {
                 containerWidth = newContainerWidth;
                 containerHeight = newContainerHeight;
-                padding = Object.assign({}, self.padding);
+                padding = self.padding;
                 viewport.resize(getPaddedSize(newContainerWidth, newContainerHeight), true);
                 self.trigger("resize", newContainerWidth, newContainerHeight);
             }

@@ -2036,6 +2036,10 @@ var PivotViewer = (Pivot.PivotViewer = function(
     rearrange()
   }
 
+  this.setPadding = function(padding) {
+    this.padding = { ...this.padding, ...padding }
+  }
+
   // Helpers -- TEMPLATING
 
   function pollForContent() {
