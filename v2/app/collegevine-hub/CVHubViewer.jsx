@@ -2037,7 +2037,7 @@ var PivotViewer = (Pivot.PivotViewer = function(
   }
 
   this.setPadding = function(padding) {
-    this.padding = { ...this.padding, ...padding }
+    self.padding = { ...self.padding, ...padding }
   }
 
   // Helpers -- TEMPLATING
