@@ -1160,6 +1160,8 @@ var PivotViewer = (Pivot.PivotViewer = function (
   function outlineItem(item, index, color, ctx, border, lineWidth) {
     var bounds, html
     if (item) {
+      self.trigger("itemFocus", item)
+
       bounds = item.source[index]
       if (templates[currentTemplateLevel].type !== "html") {
         // draw it on canvas
