@@ -54,7 +54,7 @@ makeElement, addText, hasOwnProperty, makeTemplate, document, lzwEncode, locatio
  * @param inputElmt {HTMLInputElement} A focusable textbox that is in the DOM but not
  * visible to the user.
  */
-var PivotViewer = (Pivot.PivotViewer = function(
+var PivotViewer = (Pivot.PivotViewer = function (
   canvas,
   container,
   frontLayer,
@@ -166,7 +166,7 @@ var PivotViewer = (Pivot.PivotViewer = function(
   var sdimgOpts = { manualUpdates: true }
 
   // detect an IE bug so we know whether to work around it
-  var brokenInnerHTML = (function() {
+  var brokenInnerHTML = (function () {
     var a = makeElement("div")
     var b = makeElement("div")
     b.innerHTML = "a"
@@ -201,7 +201,7 @@ var PivotViewer = (Pivot.PivotViewer = function(
     // run all current filters, and put the array contents in a set.
     // if this method is slow, try moving the inner function out here and keeping
     // a current-item variable instead of a closure. this way looks cleaner though.
-    _activeItemsArr.forEach(function(item) {
+    _activeItemsArr.forEach(function (item) {
       activeItems[item.id] = item
       activeItemsArr.push(item)
     })
@@ -217,13 +217,13 @@ var PivotViewer = (Pivot.PivotViewer = function(
         delayedFunction = func
       } else {
         var otherFunc = delayedFunction
-        delayedFunction = function() {
+        delayedFunction = function () {
           otherFunc()
           func()
         }
       }
     } else {
-      delayFunction(function() {
+      delayFunction(function () {
         delayFunction(func, delay - 1)
       })
     }
@@ -349,13 +349,13 @@ var PivotViewer = (Pivot.PivotViewer = function(
       // now prune down the arrays of the HTML representations for that item,
       // to the same length.
       n = source.length
-      item.html.forEach(function(templateArray, index) {
+      item.html.forEach(function (templateArray, index) {
         if (templates[index].type === "html") {
           var removed = templateArray.splice(n, templateArray.length - n)
 
           // if this layer of HTML templates is in the view, remove the extras.
           if (index === currentTemplateLevel) {
-            removed.forEach(function(domNode) {
+            removed.forEach(function (domNode) {
               frontLayer.removeChild(domNode)
               domNode.pvInDom = false
             })
@@ -410,7 +410,7 @@ var PivotViewer = (Pivot.PivotViewer = function(
         anythingInserted = true
 
         // make additional copies of the HTML template if necessary
-        item.html.forEach(function(htmlArray, index) {
+        item.html.forEach(function (htmlArray, index) {
           if (templates[index].type === "html") {
             var i
             for (i = item.source.length - 1; i > 0; i--) {
@@ -421,7 +421,7 @@ var PivotViewer = (Pivot.PivotViewer = function(
 
         // append items to the DOM as necessary
         if (templates[currentTemplateLevel].type === "html") {
-          item.html[currentTemplateLevel].forEach(function(node, index) {
+          item.html[currentTemplateLevel].forEach(function (node, index) {
             setTransform(node, item.source[index])
             addElementToFrontLayer(node)
             node.pvInDom = true
@@ -456,7 +456,7 @@ var PivotViewer = (Pivot.PivotViewer = function(
     if (templates[currentTemplateLevel].type === "html") {
       for (i = rearrangingItemsArr.length - 1; i >= 0; i--) {
         html = rearrangingItemsArr[i].html[currentTemplateLevel]
-        html.forEach(function(domElement) {
+        html.forEach(function (domElement) {
           frontLayer.removeChild(domElement)
           domElement.pvInDom = false
         })
@@ -490,7 +490,7 @@ var PivotViewer = (Pivot.PivotViewer = function(
 
           // we also must make duplicates of the HTML objects that represent this item, if
           // they are being used instead of drawing on a canvas.
-          html.forEach(function(htmlArray, index) {
+          html.forEach(function (htmlArray, index) {
             if (templates[index].type === "html") {
               var first = htmlArray[0]
               var copy = clone(first)
@@ -698,13 +698,13 @@ var PivotViewer = (Pivot.PivotViewer = function(
   }
 
   var comparators = {
-    Number: function(a, b) {
+    Number: function (a, b) {
       return a - b
     },
-    String: function(a, b) {
+    String: function (a, b) {
       return a > b ? 1 : a === b ? 0 : -1
     },
-    Link: function(a, b) {
+    Link: function (a, b) {
       a = a.content
       b = b.content
       return a > b ? 1 : a === b ? 0 : -1
@@ -718,7 +718,7 @@ var PivotViewer = (Pivot.PivotViewer = function(
   // take a geometric average of the height:width ratio for all items, and that
   // will be the space in which each item gets to draw itself.
   function getAverageItemHeight() {
-    var sum = items.reduce(function(prev, item) {
+    var sum = items.reduce(function (prev, item) {
       var normHeight = item.normHeight
       if (!normHeight) {
         normHeight = item.normHeight = item.sdimg[-1].state.source.normHeight
@@ -796,7 +796,7 @@ var PivotViewer = (Pivot.PivotViewer = function(
             if (hasOwnProperty.call(currentItems, id)) {
               item = currentItems[id]
               var htmlArr = item.html[oldTemplateLevel]
-              htmlArr.forEach(function(htmlContent, index) {
+              htmlArr.forEach(function (htmlContent, index) {
                 if (htmlContent.pvInDom) {
                   htmlContent.pvInDom = false
                   if (brokenInnerHTML) {
@@ -826,7 +826,7 @@ var PivotViewer = (Pivot.PivotViewer = function(
           for (id in currentItems) {
             if (hasOwnProperty.call(currentItems, id)) {
               item = currentItems[id]
-              item.html[currentTemplateLevel].forEach(function(
+              item.html[currentTemplateLevel].forEach(function (
                 htmlContent,
                 index
               ) {
@@ -1146,9 +1146,9 @@ var PivotViewer = (Pivot.PivotViewer = function(
   }
 
   // generate an ID that doesn't match any of the items in the collection
-  var generateId = (function() {
+  var generateId = (function () {
     var nextId = 0
-    return function() {
+    return function () {
       var id
       do {
         id = (nextId++).toString()
@@ -1172,7 +1172,11 @@ var PivotViewer = (Pivot.PivotViewer = function(
         html.appendChild(border)
         // adjust line width so it doesn't scale with content
         lineWidth = lineWidth * templateScale + "px"
-        border.pvtop.style.height = border.pvright.style.width = border.pvbottom.style.height = border.pvleft.style.width = lineWidth
+        border.pvtop.style.height =
+          border.pvright.style.width =
+          border.pvbottom.style.height =
+          border.pvleft.style.width =
+            lineWidth
       }
     } else if (currentTemplateLevel !== -1) {
       // remove the border from its current location
@@ -1797,7 +1801,7 @@ var PivotViewer = (Pivot.PivotViewer = function(
   // here, we resize the viewport's content dimensions to match its container size.
   function onResize(width, height) {
     // delay resizing the canvas until the beginning of the next repaint, to reduce flicker
-    delayFunction(function() {
+    delayFunction(function () {
       canvas.width = width
       canvas.height = height
     })
@@ -1905,10 +1909,12 @@ var PivotViewer = (Pivot.PivotViewer = function(
     // temporarily add them to the DOM so we can measure their color
     frontLayer.appendChild(domHoverBorder)
     frontLayer.appendChild(domSelectedBorder)
-    hoverBorderColor = Seadragon2.Element.getStyle(domHoverBorder.pvtop)
-      .backgroundColor
-    selectedBorderColor = Seadragon2.Element.getStyle(domSelectedBorder.pvtop)
-      .backgroundColor
+    hoverBorderColor = Seadragon2.Element.getStyle(
+      domHoverBorder.pvtop
+    ).backgroundColor
+    selectedBorderColor = Seadragon2.Element.getStyle(
+      domSelectedBorder.pvtop
+    ).backgroundColor
     frontLayer.removeChild(domHoverBorder)
     frontLayer.removeChild(domSelectedBorder)
   }
@@ -1920,7 +1926,7 @@ var PivotViewer = (Pivot.PivotViewer = function(
    * @method zoomToPercent
    * @param percent {number} The target zoom level
    */
-  this.zoomToPercent = function(percent) {
+  this.zoomToPercent = function (percent) {
     viewport.zoomToPercent(percent)
     viewport.applyConstraints()
   }
@@ -1929,7 +1935,7 @@ var PivotViewer = (Pivot.PivotViewer = function(
    * Move the viewport to center on the item left of the center item. Wraps around at edges.
    * @method moveLeft
    */
-  this.moveLeft = function() {
+  this.moveLeft = function () {
     // same as pressing left key
     onKeyDown({ keyCode: 37 })
   }
@@ -1938,7 +1944,7 @@ var PivotViewer = (Pivot.PivotViewer = function(
    * Move the viewport to center on the item right of the center item. Wraps around at edges.
    * @method moveRight
    */
-  this.moveRight = function() {
+  this.moveRight = function () {
     // same as pressing right key
     onKeyDown({ keyCode: 39 })
   }
@@ -1948,7 +1954,7 @@ var PivotViewer = (Pivot.PivotViewer = function(
    * @method setCenterItem
    * @param id {string} The ID of the item to center
    */
-  this.setCenterItem = function(id) {
+  this.setCenterItem = function (id) {
     if (!hasOwnProperty.call(allItemsById, id)) {
       throw "setCenterItem: No matching ID found: " + id
     }
@@ -1970,7 +1976,7 @@ var PivotViewer = (Pivot.PivotViewer = function(
    * Collapse the details pane and show the info button instead.
    * @method collapseDetails
    */
-  this.collapseDetails = function() {
+  this.collapseDetails = function () {
     detailsEnabled = false
     if (selectedItem) {
       // move the viewport so the selected item stays centered
@@ -1987,7 +1993,7 @@ var PivotViewer = (Pivot.PivotViewer = function(
    * Show the details pane and hide the info button.
    * @method expandDetails
    */
-  this.expandDetails = function() {
+  this.expandDetails = function () {
     detailsEnabled = true
     if (selectedItem) {
       // move the viewport so the selected item stays centered
@@ -2006,7 +2012,7 @@ var PivotViewer = (Pivot.PivotViewer = function(
    * Go to grid view, if the viewer is currently in graph view. Otherwise, do nothing.
    * @method gridView
    */
-  this.gridView = function() {
+  this.gridView = function () {
     if (!isGridView) {
       isGridView = true
       rearrange()
@@ -2019,7 +2025,7 @@ var PivotViewer = (Pivot.PivotViewer = function(
    * Go to graph view, if the viewer is currently in grid view. Otherwise, do nothing.
    * @method graphView
    */
-  this.graphView = function() {
+  this.graphView = function () {
     if (isGridView) {
       isGridView = false
       rearrange()
@@ -2032,11 +2038,11 @@ var PivotViewer = (Pivot.PivotViewer = function(
    * Start rearranging the viewer based on the currently selected filters.
    * @method filter
    */
-  this.filter = function() {
+  this.filter = function () {
     rearrange()
   }
 
-  this.setPadding = function(padding) {
+  this.setPadding = function (padding) {
     self.padding = { ...self.padding, ...padding }
   }
 
@@ -2048,7 +2054,7 @@ var PivotViewer = (Pivot.PivotViewer = function(
       if (hasOwnProperty.call(contentPollingEndpoints, index)) {
         var endpoint = contentPollingEndpoints[index]
 
-        ;(function() {
+        ;(function () {
           var indexCopy = parseInt(index, 10),
             level = endpoint.level,
             itemArray = endpoint.items
@@ -2058,7 +2064,7 @@ var PivotViewer = (Pivot.PivotViewer = function(
           // make the level anew if it actually needs it because the items have changed.
           Seadragon2.Xml.fetch(
             endpoint.url,
-            function() {
+            function () {
               // success callback
               var result
               try {
@@ -2103,7 +2109,7 @@ var PivotViewer = (Pivot.PivotViewer = function(
                 // here, rather than referencing the DZC file by URL.
 
                 // create new sdimgs at this level for each item
-                itemArray.forEach(function(item, itemIndex) {
+                itemArray.forEach(function (item, itemIndex) {
                   var sdimg = (item.sdimg[level] = new Seadragon2.Image(
                     sdimgOpts
                   ))
@@ -2128,7 +2134,7 @@ var PivotViewer = (Pivot.PivotViewer = function(
                 contentPollingCount--
               }
             },
-            function() {
+            function () {
               // failure callback
               Seadragon2.Debug.warn(
                 "Received failure code from server-side renderer"
@@ -2160,12 +2166,12 @@ var PivotViewer = (Pivot.PivotViewer = function(
       // we have to upload all current styles to the server so it renders correctly
       style: reduce.call(
         document.styleSheets,
-        function(prev, styleSheet) {
+        function (prev, styleSheet) {
           return (
             prev +
             reduce.call(
               styleSheet.cssRules,
-              function(prev, styleRule) {
+              function (prev, styleRule) {
                 return prev + styleRule.cssText
               },
               ""
@@ -2188,7 +2194,7 @@ var PivotViewer = (Pivot.PivotViewer = function(
 
         // we don't want to upload the full representation of each item, just its
         // HTML template for this level.
-        jsonObject.items = itemsArray.map(function(item) {
+        jsonObject.items = itemsArray.map(function (item) {
           return item.html[index][0].innerHTML
         })
 
@@ -2199,7 +2205,7 @@ var PivotViewer = (Pivot.PivotViewer = function(
         jsonString = lzwEncode(jsonString)
 
         // introduce a new scope so we can use temporary variables in the callbacks
-        ;(function() {
+        ;(function () {
           var indexCopy = index,
             rendererCopy = template.renderer,
             itemsArrayCopy = itemsArray
@@ -2208,7 +2214,7 @@ var PivotViewer = (Pivot.PivotViewer = function(
           // it should be fewer total round trips if we stick with default text/plain.
           Seadragon2.Xml.fetch(
             serverName,
-            function() {
+            function () {
               // success handler
               var result
               try {
@@ -2235,7 +2241,7 @@ var PivotViewer = (Pivot.PivotViewer = function(
                 delayFunction(pollForContent, 60)
               }
             },
-            function() {
+            function () {
               // failure handler
               Seadragon2.Debug.warn(
                 "Failed to post collection data. Status text: " +
@@ -2273,7 +2279,7 @@ var PivotViewer = (Pivot.PivotViewer = function(
     if (oldSdimgArray) {
       sdimgArray[-1] = oldSdimgArray[-1]
     }
-    templates.forEach(function(template, index) {
+    templates.forEach(function (template, index) {
       switch (template.type) {
         case "canvas":
           htmlArray.push([])
@@ -2341,7 +2347,7 @@ var PivotViewer = (Pivot.PivotViewer = function(
             // In rare cases there might be multiple copies of the element's HTML because
             // it is present in multiple graph bars. TODO optimize templating in this case.
             htmlArray.push(oldHtmlArray[index])
-            oldHtmlArray[index].forEach(function(htmlElement) {
+            oldHtmlArray[index].forEach(function (htmlElement) {
               makeTemplate(template, item, htmlElement)
             })
           } else {
@@ -2387,7 +2393,7 @@ var PivotViewer = (Pivot.PivotViewer = function(
    * Even if there is only one value for a particular facet, it must be in an array.
    * </dl>
    */
-  this.addItems = function(newItems) {
+  this.addItems = function (newItems) {
     // if we're busy clearing a previous collection, wait until it's done before adding new items.
     // this helps protect against cases where IDs in the new collection collide with the old collection
     // and produce unintended results.
@@ -2396,7 +2402,7 @@ var PivotViewer = (Pivot.PivotViewer = function(
       (activeItemsArr.length || rearrangingItemsArr.length)
     ) {
       // delay it
-      delayFunction(function() {
+      delayFunction(function () {
         self.addItems(newItems)
       })
       return
@@ -2422,7 +2428,7 @@ var PivotViewer = (Pivot.PivotViewer = function(
         self.filter()
       }
     }
-    newItems.forEach(function(item) {
+    newItems.forEach(function (item) {
       // like anything else, we might have different sdimg representations of different zoom levels
       var sdimgs = (item.sdimg = item.sdimg || []),
         sdimg
@@ -2474,7 +2480,7 @@ var PivotViewer = (Pivot.PivotViewer = function(
   // already via `hasAddedItems`:
   let hasAddedItems = false
 
-  this.setActiveItems = newItems => {
+  this.setActiveItems = (newItems) => {
     if (!hasAddedItems) {
       this.addItems(newItems)
       hasAddedItems = true
@@ -2489,7 +2495,7 @@ var PivotViewer = (Pivot.PivotViewer = function(
     rearrange()
   }
 
-  this.setActiveGroups = groups => {
+  this.setActiveGroups = (groups) => {
     if (!hasAddedItems) {
       let allItems = groups.reduce((results, group) => {
         const { items } = group
@@ -2504,9 +2510,9 @@ var PivotViewer = (Pivot.PivotViewer = function(
     _activeItemsArr = []
     _activeGroups = groups
 
-    groups.forEach(group => {
+    groups.forEach((group) => {
       const { items } = group
-      items.forEach(item => {
+      items.forEach((item) => {
         updateTemplate(item)
         _activeItemsArr.push(item)
       })
@@ -2538,20 +2544,20 @@ var PivotViewer = (Pivot.PivotViewer = function(
    * templates, read the <a href="../../app/pivot/quickstart.html">developer's guide</a>.</dd>
    * </dl>
    */
-  this.setTemplates = function(newTemplates) {
+  this.setTemplates = function (newTemplates) {
     // we disallow changing the template types while there are items in the view
     if (items.length || activeItemsArr.length || rearrangingItemsArr.length) {
       throw "You must set templates before adding items!"
     }
 
     // note that this does modify the input array
-    templates = newTemplates.sort(function(a, b) {
+    templates = newTemplates.sort(function (a, b) {
       return a.width - b.width
     })
     templates[-1] = { type: "sdimg" }
 
     // set up templates that draw directly on canvas
-    templates.forEach(function(template) {
+    templates.forEach(function (template) {
       if (template.type === "canvas") {
         template.func = makeTemplate(template)
       }
@@ -2570,7 +2576,7 @@ var PivotViewer = (Pivot.PivotViewer = function(
    * Remove all items from the collection.
    * @method clearItems
    */
-  this.clearItems = function() {
+  this.clearItems = function () {
     items = []
     allItemsById = {}
 
@@ -2583,7 +2589,7 @@ var PivotViewer = (Pivot.PivotViewer = function(
    * @param id {string} the ID to find
    * @return {object} the object representing the item, in the format used by addItems
    */
-  this.getItemById = function(id) {
+  this.getItemById = function (id) {
     return allItemsById[id]
   }
 
