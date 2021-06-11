@@ -107,6 +107,7 @@ var PivotViewer = (Pivot.PivotViewer = function (
   var lastMousePosition
   var hoveredItem
   var hoveredItemIndex // which of the hovered item's positions actually has the mouse
+  var oldHoveredItem
   var selectedItem
   var selectedItemIndex
   var centerItem
@@ -1159,7 +1160,13 @@ var PivotViewer = (Pivot.PivotViewer = function (
 
   function outlineItem(item, index, color, ctx, border, lineWidth) {
     var bounds, html
+
     if (item) {
+      if (item !== oldHoveredItem){
+        self.trigger("itemFocus", item)
+        oldHoveredItem = item
+      }
+
       bounds = item.source[index]
       if (templates[currentTemplateLevel].type !== "html") {
         // draw it on canvas
@@ -1435,6 +1442,7 @@ var PivotViewer = (Pivot.PivotViewer = function (
 
         centerItem = undefined
         zoomedIn = false
+        anyItemHovered = false
 
         // draw every item on the canvas
         for (j = activeItemsArr.length - 1; j >= 0; j--) {
@@ -1509,6 +1517,11 @@ var PivotViewer = (Pivot.PivotViewer = function (
                 ) {
                   hoveredItem = item
                   hoveredItemIndex = i
+                  anyItemHovered = true
+
+                  if (!oldHoveredItem){
+                    oldHoveredItem = hoveredItem
+                  }
                 }
               } else if (usingHtml) {
                 // if we're using HTML templates, make sure this item isn't in the DOM for performance.
@@ -1520,6 +1533,11 @@ var PivotViewer = (Pivot.PivotViewer = function (
               }
             }
           }
+        }
+
+        // if an item is selected, disable focus on hover
+        if (!anyItemHovered && oldHoveredItem) {
+          self.trigger("itemBlur")
         }
 
         // prepare to draw outlines

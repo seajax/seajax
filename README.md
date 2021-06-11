@@ -28,6 +28,9 @@ As a historical note, most of this code was written in 2010 and was targeted at
 mouse interaction, so updates may be needed for newer browsers and touch
 interaction.
 
+# Prerequisites
+
+You must be on Node.js version `10.15.3`
 
 # Setup
 

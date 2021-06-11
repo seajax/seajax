@@ -72,6 +72,7 @@ from sys import argv, path
 from file_helpers import *  # under %SDROOT%/Build/Scripts/
 from subprocess import call
 
+import os
 import shutil
 
 
@@ -86,7 +87,8 @@ def build_specific(target, type):
     # at the end is the _post wrapper for this type.
     files.append(PATH_POST_FILE % type)
 
-    shutil.rmtree(PATH_COMPILED_FILES)
+    if os.path.isdir(PATH_COMPILED_FILES):
+      shutil.rmtree(PATH_COMPILED_FILES)
     shutil.copytree(PATH_APP_FILES, PATH_COMPILED_FILES + "app")
     shutil.copytree(PATH_SRC_FILES, PATH_COMPILED_FILES + "src")
 
