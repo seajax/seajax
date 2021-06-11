@@ -1517,7 +1517,7 @@ var PivotViewer = (Pivot.PivotViewer = function (
                   hoveredItem = item
                   hoveredItemIndex = i
 
-                  if (!oldHoveredItem){
+                  if (!oldHoveredItem) {
                     oldHoveredItem = hoveredItem
                   }
                 }
