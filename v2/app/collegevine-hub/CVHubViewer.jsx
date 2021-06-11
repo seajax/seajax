@@ -107,6 +107,7 @@ var PivotViewer = (Pivot.PivotViewer = function (
   var lastMousePosition
   var hoveredItem
   var hoveredItemIndex // which of the hovered item's positions actually has the mouse
+  var oldHoveredItem
   var selectedItem
   var selectedItemIndex
   var centerItem
@@ -1159,8 +1160,12 @@ var PivotViewer = (Pivot.PivotViewer = function (
 
   function outlineItem(item, index, color, ctx, border, lineWidth) {
     var bounds, html
+
     if (item) {
-      self.trigger("itemFocus", item)
+      if (item != oldHoveredItem){
+        self.trigger("itemFocus", item)
+        oldHoveredItem = item
+      }
 
       bounds = item.source[index]
       if (templates[currentTemplateLevel].type !== "html") {
@@ -1437,6 +1442,7 @@ var PivotViewer = (Pivot.PivotViewer = function (
 
         centerItem = undefined
         zoomedIn = false
+        anyItemHovered = false
 
         // draw every item on the canvas
         for (j = activeItemsArr.length - 1; j >= 0; j--) {
@@ -1504,6 +1510,7 @@ var PivotViewer = (Pivot.PivotViewer = function (
                     ) || anythingChanged
                 }
 
+                // console.log(itemBounds.contains(contentMousePosition))
                 // check whether the mouse is over the current item
                 if (
                   lastMousePosition &&
@@ -1511,6 +1518,11 @@ var PivotViewer = (Pivot.PivotViewer = function (
                 ) {
                   hoveredItem = item
                   hoveredItemIndex = i
+                  anyItemHovered = true
+
+                  if (!oldHoveredItem){
+                    oldHoveredItem = hoveredItem
+                  }
                 }
               } else if (usingHtml) {
                 // if we're using HTML templates, make sure this item isn't in the DOM for performance.
@@ -1524,6 +1536,10 @@ var PivotViewer = (Pivot.PivotViewer = function (
           }
         }
 
+        // if an item is selected, disable focus on hover
+        if (!anyItemHovered && oldHoveredItem){
+          self.trigger("itemBlur")
+        }
         // prepare to draw outlines
         var lineWidth = viewport.deltaPointsFromPixels(
           new Seadragon2.Point(3, 0)
@@ -1559,7 +1575,6 @@ var PivotViewer = (Pivot.PivotViewer = function (
           }
           viewport.visibilityRatio = 1
         }
-
         // draw an outline for selected item
         outlineItem(
           selectedItem,

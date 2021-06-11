@@ -28,9 +28,9 @@ As a historical note, most of this code was written in 2010 and was targeted at
 mouse interaction, so updates may be needed for newer browsers and touch
 interaction.
 
-
+# Prerequisites
+You must be on node version `10.15.3`
 # Setup
-
 First, install development tools using `npm install`.
 
 - 	**Windows:** To build all outputs, run
