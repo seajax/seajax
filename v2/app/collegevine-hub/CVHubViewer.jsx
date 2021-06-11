@@ -1442,6 +1442,7 @@ var PivotViewer = (Pivot.PivotViewer = function (
 
         centerItem = undefined
         zoomedIn = false
+        anyItemHovered = false
 
         // draw every item on the canvas
         for (j = activeItemsArr.length - 1; j >= 0; j--) {
@@ -1516,8 +1517,9 @@ var PivotViewer = (Pivot.PivotViewer = function (
                 ) {
                   hoveredItem = item
                   hoveredItemIndex = i
+                  anyItemHovered = true
 
-                  if (!oldHoveredItem) {
+                  if (!oldHoveredItem){
                     oldHoveredItem = hoveredItem
                   }
                 }
@@ -1534,7 +1536,7 @@ var PivotViewer = (Pivot.PivotViewer = function (
         }
 
         // if an item is selected, disable focus on hover
-        if (hoveredItem && oldHoveredItem){
+        if (!anyItemHovered && oldHoveredItem) {
           self.trigger("itemBlur")
         }
         // prepare to draw outlines
