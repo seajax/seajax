@@ -29,8 +29,10 @@ mouse interaction, so updates may be needed for newer browsers and touch
 interaction.
 
 # Prerequisites
-You must be on node version `10.15.3`
+
+You must be on Node.js version `10.15.3`
 # Setup
+
 First, install development tools using `npm install`.
 
 - 	**Windows:** To build all outputs, run
