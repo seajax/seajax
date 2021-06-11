@@ -1510,7 +1510,6 @@ var PivotViewer = (Pivot.PivotViewer = function (
                     ) || anythingChanged
                 }
 
-                // console.log(itemBounds.contains(contentMousePosition))
                 // check whether the mouse is over the current item
                 if (
                   lastMousePosition &&
