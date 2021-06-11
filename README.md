@@ -31,6 +31,7 @@ interaction.
 # Prerequisites
 
 You must be on Node.js version `10.15.3`
+
 # Setup
 
 First, install development tools using `npm install`.

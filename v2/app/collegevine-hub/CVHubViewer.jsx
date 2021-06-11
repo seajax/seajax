@@ -1539,6 +1539,7 @@ var PivotViewer = (Pivot.PivotViewer = function (
         if (!anyItemHovered && oldHoveredItem) {
           self.trigger("itemBlur")
         }
+
         // prepare to draw outlines
         var lineWidth = viewport.deltaPointsFromPixels(
           new Seadragon2.Point(3, 0)
@@ -1574,6 +1575,7 @@ var PivotViewer = (Pivot.PivotViewer = function (
           }
           viewport.visibilityRatio = 1
         }
+
         // draw an outline for selected item
         outlineItem(
           selectedItem,
