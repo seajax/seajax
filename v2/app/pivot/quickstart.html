@@ -59,7 +59,7 @@ the same content to every visitor on the page. It will look something like this:
 
 <code>&lt;div class="pivot_ajax_viewer"
      data-collection="http://contoso.com/widgets.cxml"
-     data-use-hash="true"
+     data-use-history="true"
      style="width:1000px;height:600px;border:2px solid gray"&gt;
     Oops, something went wrong! Make sure Javascript is enabled.
 &lt;/div&gt;</code>
@@ -69,8 +69,8 @@ script must be included in your page markup (either in the head or body), and no
 window's load event. The <code>data-collection</code> attribute can be either a relative or absolute URL, just be sure that your
 server is returning an appropriate <code>Access-Control-Allow-Origin</code> header if you're using a collection hosted on another
 domain. Feel free to style the div however you like, of course. If you resize it, the viewer should adjust itself
-automatically. The <code>data-use-hash</code> attribute specifies that the viewer should change the URL hash to match its
-current state, and should try to read the URL hash when the page is loaded. If you only have one PivotViewer on the page and it
+automatically. The <code>data-use-history</code> attribute specifies that the viewer should change the URL to match its
+current state, and should try to read the state from the URL when the page is loaded. If you only have one PivotViewer on the page and it
 won't conflict with any other page functionality, it probably makes sense to turn this feature on.</p>
 
 <p>If you use this method, you can skip the rest of this document because you already have a fully working viewer.</p>

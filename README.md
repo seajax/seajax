@@ -28,6 +28,9 @@ As a historical note, most of this code was written in 2010 and was targeted at
 mouse interaction, so updates may be needed for newer browsers and touch
 interaction.
 
+# Prerequisites
+
+You must be on Node.js version `10.15.3`
 
 # Setup
 
@@ -37,11 +40,21 @@ First, install development tools using `npm install`.
 	[`Build/Scripts/seajax_v2.py`](./Build/Scripts/seajax_v2.py) using Python 2
 	or 3.
 
-- 	**Mac OS X:** To build all outputs, run:
+- 	**Mac OS X**
+    - Build all targets:
 
-	```bash
-	make
-	```
+      ```bash
+      make
+      ```
+    - Build a single target:
+
+      ```bash
+      make <target>
+
+      # Examples
+      make pivot
+      make collegevine
+      ```
 
 The build script is currently set up to call `ajaxmin` for its minification
 step, but that could easily be swapped for another minifier if you prefer.

@@ -6,6 +6,7 @@
 
 # Built files
 /bin/
+/v2/compiled/
 
 # npm
 /node_modules/

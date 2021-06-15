@@ -1,5 +1,5 @@
 // Copyright (c) Microsoft Corporation
-// All rights reserved. 
+// All rights reserved.
 // BSD License
 //
 // Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -35,10 +35,10 @@ PivotNumber_format, makeElement, addText, hasOwnProperty, PivotDatePicker, Pivot
  * yourself, you should call this method rather than the Pivot.PivotViewer constructor.
  * @method init
  * @param div {HTMLElement} The container element
- * @param useHash {bool} Whether to adjust the URL fragment to represent current filter state
+ * @param useHistory {bool} Whether to update the URL to represent current filter state
  * @return {Pivot.PivotViewer}
  */
-var Pivot_init = Pivot.init = function (div, useHash) {
+var Pivot_init = Pivot.init = function (div, useHistory) {
     // clear out the workspace we've been provided
     while(div.firstChild) {
         div.removeChild(div.firstChild);
@@ -46,9 +46,12 @@ var Pivot_init = Pivot.init = function (div, useHash) {
 
     // check whether the browser supports canvas
     if (!makeElement("canvas").getContext) {
-        addText(div, "Your browser doesn't support canvas! Get a better one.");
+        addText(div, "Your browser doesn’t support canvas! Get a more modern one.");
         return;
     }
+
+    // initial state
+    var hasStateBeenAppliedFromURL = false
 
     // start by setting up some basics for our view
     var inputElmt = makeElement("input", "pivot_input", div);
@@ -950,22 +953,25 @@ var Pivot_init = Pivot.init = function (div, useHash) {
                 };
             }
         }
+        const isGridViewActive = gridButton.className.indexOf("pivot_activesort") !== -1
         return JSON.stringify({
             filters: filtersCopy,
             search: activeSearch,
             sortBy: sortBox.value,
-            view: (gridButton.className.indexOf("pivot_activesort") !== -1) ? "grid" : "graph"
+            view: isGridViewActive ? "grid" : "graph"
         });
     }
 
     // apply a serialized set of filters. currently assumes that the viewer state is fresh
     // (no filters applied yet, in grid view mode)
-    function deserializeFilters(filterData) {
+    function deserializeAndApplyFilters(filterData) {
         filterData = JSON.parse(filterData);
         var filters = filterData.filters;
         var search = filterData.search;
         var sortBy = filterData.sortBy;
         var facetName;
+
+        onClearAll(false)
         for (facetName in filters) {
             if (hasOwnProperty.call(filters, facetName)) {
                 var filter = filters[facetName];
@@ -1003,7 +1009,39 @@ var Pivot_init = Pivot.init = function (div, useHash) {
         if (filterData.view === "graph") {
             graphButton.onclick();
         }
+        if (filterData.view === "grid") {
+            gridButton.onclick();
+        }
         refreshFilterPane();
+    }
+
+    function getQueryVariable(name) {
+        var query = location.search.substring(1);
+        var vars = query.split('&');
+        for (var i = 0; i < vars.length; i++) {
+            var pair = vars[i].split('=');
+            if (decodeURIComponent(pair[0]) == name) {
+                return decodeURIComponent(pair[1]);
+            }
+        }
+        return null
+    }
+
+    function getPathWithState() {
+        return '?state=' + encodeURIComponent(serializeFilters())
+    }
+
+    function applyStateFromURL() {
+        const state = getQueryVariable('state')
+        if (!state) {
+            return
+        }
+
+        try {
+            deserializeAndApplyFilters(state);
+        } catch (error) {
+            Seadragon2.Debug.warn("Bad URL state");
+        }
     }
 
     // once we know about facets for the collection, we can build
@@ -1117,16 +1155,11 @@ var Pivot_init = Pivot.init = function (div, useHash) {
             facetOptions.style.overflow = "hidden";
         }
 
-        // apply filters from the hash immediately
-        if (useHash) {
-            var hash = location.hash;
-            if (hash && hash.length > 2) {
-                try {
-                    deserializeFilters(decodeURIComponent(hash.substr(1)));
-                } catch (e) {
-                    Seadragon2.Debug.warn("bad URL hash");
-                }
-            }
+        // apply filters from URL
+        if (useHistory) {
+            hasStateBeenAppliedFromURL = true
+            history.replaceState(null, '', getPathWithState());
+            applyStateFromURL();
         }
     });
 
@@ -1138,11 +1171,20 @@ var Pivot_init = Pivot.init = function (div, useHash) {
         }
     });
 
-    // put the current filter state in the hash after any rearrange operation
-    if (useHash) {
+    // put the current filter state in the query after any rearrange operation
+    if (useHistory) {
         viewer.addListener("finishedRearrange", function () {
-            location.hash = "#" + encodeURIComponent(serializeFilters());
+            if (hasStateBeenAppliedFromURL) {
+                hasStateBeenAppliedFromURL = false
+                return
+            }
+            history.pushState(null, '', getPathWithState());
         });
+
+        window.addEventListener('popstate', function (event) {
+            hasStateBeenAppliedFromURL = true
+            applyStateFromURL()
+        })
     }
 
     return viewer;
@@ -1163,9 +1205,9 @@ addEventListener("load", function () {
     for (i = 0; i < n; i++) {
         div = viewers[i];
         url = div.getAttribute("data-collection");
-        var useHash = div.getAttribute("data-use-hash");
-        useHash = useHash && useHash.toLowerCase() !== "false";
-        viewer = Pivot_init(div, useHash);
+        var useHistory = div.getAttribute("data-use-history");
+        useHistory = useHistory && useHistory.toLowerCase() !== "false";
+        viewer = Pivot_init(div, useHistory);
         div.pivotViewer = viewer;
         if (url) {
             PivotCxmlLoader.load(viewer, url);
