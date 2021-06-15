@@ -1162,11 +1162,6 @@ var PivotViewer = (Pivot.PivotViewer = function (
     var bounds, html
 
     if (item) {
-      if (item !== oldHoveredItem){
-        self.trigger("itemFocus", item)
-        oldHoveredItem = item
-      }
-
       bounds = item.source[index]
       if (templates[currentTemplateLevel].type !== "html") {
         // draw it on canvas
@@ -1554,6 +1549,11 @@ var PivotViewer = (Pivot.PivotViewer = function (
           domHoverBorder,
           lineWidth
         )
+
+        if (hoveredItem && hoveredItem !== oldHoveredItem){
+          self.trigger("itemFocus", hoveredItem)
+          oldHoveredItem = hoveredItem
+        }
 
         // show or hide the details pane as necessary
         if (centerItem && zoomedIn) {
